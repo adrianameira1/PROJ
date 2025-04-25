@@ -1,0 +1,14 @@
+# Node
+frontend-quinta/node_modules/
+frontend-quinta/build/
+
+# Maven / Spring Boot
+projetoii_dados/target/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log

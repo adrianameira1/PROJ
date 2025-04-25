@@ -1,6 +1,6 @@
 # Node
-frontend-quinta/node_modules/
-frontend-quinta/build/
+frontend/node_modules/
+frontend/build/
 
 # Maven / Spring Boot
 .idea/projetoII_dados/target/

@@ -3,7 +3,7 @@ frontend-quinta/node_modules/
 frontend-quinta/build/
 
 # Maven / Spring Boot
-proj/projetoII_dados/target/
+.idea/projetoII_dados/target/
 
 # IDEs
 .idea/

@@ -1,7 +1,6 @@
 package com.example.projetoii_dados.controllers;
 
 import com.example.projetoii_dados.models.Tiposervico;
-import com.example.projetoii_dados.services.TipoEventoService;
 import com.example.projetoii_dados.services.TipoServicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

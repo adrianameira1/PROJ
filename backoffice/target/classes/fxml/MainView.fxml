@@ -2,10 +2,12 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <VBox xmlns="http://javafx.com/javafx/${javafx.version}"
       xmlns:fx="http://javafx.com/fxml/1"
-      alignment="CENTER" spacing="20" padding="20">
+      alignment="CENTER" spacing="20">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
     <Label text="BackOffice – Quinta Eventos" style="-fx-font-size:24px;"/>
     <Button text="Admin" />
     <Button text="Gestor" />

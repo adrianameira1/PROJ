@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/${javafx.version}"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.backoffice.LoginController"
+            style="-fx-background-color: #E6E4D8;">
+
+    <center>
+        <VBox alignment="CENTER" spacing="15">
+            <!-- LOGO -->
+            <ImageView fitWidth="120" preserveRatio="true">
+                <image>
+                    <Image url="/images/login.png" />
+                </image>
+            </ImageView>
+
+            <!-- Username -->
+            <VBox spacing="5" alignment="CENTER" prefWidth="300">
+                <Label text="Username" style="-fx-text-fill: #3C716B; -fx-font-weight: bold;"/>
+                <TextField fx:id="usernameField"
+                           promptText="user@exemplo.com"
+                           maxWidth="300"
+                           style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: transparent; -fx-padding: 10;"/>
+            </VBox>
+
+            <!-- Password -->
+            <VBox spacing="5" alignment="CENTER" prefWidth="300">
+                <Label text="Password" style="-fx-text-fill: #3C716B; -fx-font-weight: bold;"/>
+                <PasswordField fx:id="passwordField"
+                               promptText="********"
+                               maxWidth="300"
+                               style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: transparent; -fx-padding: 10;"/>
+            </VBox>
+
+            <!-- Botão Validar -->
+            <Button text="Validar" onAction="#handleLogin"
+                    style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 10 40;"/>
+        </VBox>
+    </center>
+
+</BorderPane>

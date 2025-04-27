@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+
 <VBox xmlns="http://javafx.com/javafx/${javafx.version}"
       xmlns:fx="http://javafx.com/fxml/1"
-      alignment="CENTER" spacing="20">
+      fx:controller="com.backoffice.MainViewController"
+      alignment="CENTER"
+      spacing="20"
+      style="-fx-background-color: #E6E4D8;">
+
+    <!-- Padding correto -->
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
-    <Label text="BackOffice – Quinta Eventos" style="-fx-font-size:24px;"/>
-    <Button text="Admin" />
-    <Button text="Gestor" />
-    <Button text="Chefe de Sala" />
+
+    <!-- LOGO em cima -->
+    <ImageView fitWidth="300" preserveRatio="true">
+        <image>
+            <Image url="/images/logo.png" />
+        </image>
+    </ImageView>
+
+    <!-- TÍTULO -->
+    <Label text="BackOffice – Quinta Eventos"
+           style="-fx-font-size: 24px; -fx-text-fill: #3C716B; -fx-font-weight: bold;"/>
+
+    <!-- BOTÕES -->
+    <Button fx:id="adminButton"
+            text="Admin"
+            onAction="#openLogin"
+            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
+
+    <Button fx:id="gestorButton"
+            text="Gestor"
+            onAction="#openLogin"
+            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
+
+    <Button fx:id="chefeButton"
+            text="Chefe de Sala"
+            onAction="#openLogin"
+            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
+
 </VBox>

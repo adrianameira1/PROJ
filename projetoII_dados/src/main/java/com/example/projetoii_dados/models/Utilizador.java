@@ -17,6 +17,8 @@ public class Utilizador {
     @Column(name = "username", nullable = false, length = 50)
     private String username;
 
+    private String passwordHash;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")
     private Cliente idCliente;
@@ -35,6 +37,15 @@ public class Utilizador {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public String getNome() {

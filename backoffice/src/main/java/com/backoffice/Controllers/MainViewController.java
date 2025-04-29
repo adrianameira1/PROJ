@@ -1,4 +1,4 @@
-package com.backoffice;
+package com.backoffice.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

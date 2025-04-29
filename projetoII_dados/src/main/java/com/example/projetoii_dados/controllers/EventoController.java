@@ -1,6 +1,6 @@
 package com.example.projetoii_dados.controllers;
 
-import com.example.projetoii_dados.models.Evento;
+import com.example.core.models.Evento;
 import com.example.projetoii_dados.services.EventoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

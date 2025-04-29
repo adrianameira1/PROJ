@@ -1,6 +1,6 @@
 package com.example.projetoii_dados.controllers;
 
-import com.example.projetoii_dados.models.Fornecedore;
+import com.example.core.models.Fornecedore;
 import com.example.projetoii_dados.services.FornecedoresService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

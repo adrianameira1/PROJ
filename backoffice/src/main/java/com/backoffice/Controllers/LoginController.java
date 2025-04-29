@@ -53,6 +53,13 @@ public class LoginController {
         }
     }
 
+    private String tipoUtilizador;
+
+    public void setUserType(String tipo) {
+        this.tipoUtilizador = tipo;
+        System.out.println("✅ Tipo de utilizador recebido: " + tipo);
+        // Aqui podes atualizar uma Label ou guardar para abrir a Home certa
+    }
 
     private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

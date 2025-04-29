@@ -3,7 +3,9 @@ frontend/node_modules/
 frontend/build/
 
 # Maven / Spring Boot
-.idea/projetoII_dados/target/
+/target/
+backoffice/target/
+projetoII_dados/target/
 
 # IDEs
 .idea/
@@ -12,3 +14,6 @@ frontend/build/
 
 # Logs
 *.log
+
+# Outros
+.DS_Store

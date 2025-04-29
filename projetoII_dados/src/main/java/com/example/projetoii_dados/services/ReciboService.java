@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Recibo;
-import com.example.projetoii_dados.reps.ReciboRepository;
+import com.example.core.models.Recibo;
+import com.example.core.repositories.ReciboRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

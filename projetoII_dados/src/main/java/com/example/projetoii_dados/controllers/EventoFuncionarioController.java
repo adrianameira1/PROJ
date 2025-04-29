@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.controllers;
 
-import com.example.projetoii_dados.models.Eventofuncionario;
-import com.example.projetoii_dados.models.EventofuncionarioId;
+import com.example.core.models.Eventofuncionario;
+import com.example.core.models.EventofuncionarioId;
 import com.example.projetoii_dados.services.EventoFuncionarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

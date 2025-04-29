@@ -1,1 +1,12 @@
+com\backoffice\Controllers\ReservaController.class
+com\backoffice\Service\ApiService$1.class
+com\backoffice\Controllers\GestorHomeController.class
+com\backoffice\Controllers\LoginController.class
+com\backoffice\Controllers\MainViewController.class
+com\backoffice\model\TipoUtilizador.class
+com\backoffice\Service\ApiService.class
+com\backoffice\Controllers\AdminHomeController.class
+com\backoffice\Controllers\ChefeSalaHomeController.class
+com\backoffice\services\ReservaService.class
 com\backoffice\MainApp.class
+com\backoffice\model\Utilizador.class

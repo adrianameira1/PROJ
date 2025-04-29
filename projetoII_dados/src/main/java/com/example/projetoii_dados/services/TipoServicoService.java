@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Tiposervico;
-import com.example.projetoii_dados.reps.TipoServicoRepository;
+import com.example.core.models.Tiposervico;
+import com.example.core.repositories.TipoServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

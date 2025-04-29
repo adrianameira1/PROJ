@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Funcionariosfixo;
-import com.example.projetoii_dados.reps.FuncionariosFixosRepository;
+import com.example.core.models.Funcionariosfixo;
+import com.example.core.repositories.FuncionariosFixosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

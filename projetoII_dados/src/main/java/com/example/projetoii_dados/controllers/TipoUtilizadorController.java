@@ -1,6 +1,6 @@
 package com.example.projetoii_dados.controllers;
 
-import com.example.projetoii_dados.models.Tipoutilizador;
+import com.example.core.models.Tipoutilizador;
 import com.example.projetoii_dados.services.TipoUtilizadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.example.projetoii_dados.controllers;
 
-import com.example.projetoii_dados.models.Tipofatura;
+import com.example.core.models.Tipofatura;
 import com.example.projetoii_dados.services.TipofaturaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

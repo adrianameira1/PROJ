@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Cliente;
-import com.example.projetoii_dados.reps.ClienteRepository;
+import com.example.core.models.Cliente;
+import com.example.core.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

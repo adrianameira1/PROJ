@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Tipofatura;
-import com.example.projetoii_dados.reps.TipoFaturaRepository;
+import com.example.core.models.Tipofatura;
+import com.example.core.repositories.TipoFaturaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

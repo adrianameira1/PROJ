@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Tipoevento;
-import com.example.projetoii_dados.reps.TipoEventoRepository;
+import com.example.core.models.Tipoevento;
+import com.example.core.repositories.TipoEventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

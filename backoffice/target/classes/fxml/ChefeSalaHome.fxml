@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Label?>
 
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.backoffice.ChefeSalaHomeController" alignment="CENTER" spacing="20"
+      fx:controller="com.backoffice.Controllers.ChefeSalaHomeController" alignment="CENTER" spacing="20"
       style="-fx-background-color: #E6E4D8;">
     <Label fx:id="welcomeLabel" style="-fx-font-size: 24px; -fx-text-fill: #3C716B;" />
 </VBox>

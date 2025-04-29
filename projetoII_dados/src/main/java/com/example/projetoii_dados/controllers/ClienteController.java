@@ -1,6 +1,5 @@
 package com.example.projetoii_dados.controllers;
-
-import com.example.projetoii_dados.models.Cliente;
+import com.example.core.models.Cliente;
 import com.example.projetoii_dados.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

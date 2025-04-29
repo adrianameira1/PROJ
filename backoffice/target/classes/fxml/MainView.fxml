@@ -7,7 +7,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/${javafx.version}"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.backoffice.MainViewController"
+      fx:controller="com.backoffice.Controllers.MainViewController"
       alignment="CENTER"
       spacing="20"
       style="-fx-background-color: #E6E4D8;">
@@ -26,18 +26,18 @@
            style="-fx-font-size: 24px; -fx-text-fill: #3C716B; -fx-font-weight: bold;"/>
 
     <Button fx:id="adminButton"
-            text="Admin"
+            text="Responsável da Quinta"
             onAction="#openLoginAdmin"
-            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
+            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 30; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
 
     <Button fx:id="gestorButton"
-            text="Gestor"
+            text="Gestor de Eventos"
             onAction="#openLoginGestor"
-            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
+            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 30; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
 
     <Button fx:id="chefeButton"
             text="Chefe de Sala"
             onAction="#openLoginChefe"
-            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
+            style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 30; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;"/>
 
 </VBox>

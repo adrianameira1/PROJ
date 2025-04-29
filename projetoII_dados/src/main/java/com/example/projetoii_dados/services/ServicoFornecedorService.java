@@ -1,8 +1,8 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.ServicoFornecedor;
-import com.example.projetoii_dados.models.ServicoFornecedorId;
-import com.example.projetoii_dados.reps.ServicoFornecedorRepository;
+import com.example.core.models.ServicoFornecedor;
+import com.example.core.models.ServicoFornecedorId;
+import com.example.core.repositories.ServicoFornecedorRepository;
 import org.springframework.stereotype.Service;
 
 

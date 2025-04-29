@@ -1,8 +1,8 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Eventofuncionario;
-import com.example.projetoii_dados.models.EventofuncionarioId;
-import com.example.projetoii_dados.reps.EventoFuncionarioRepository;
+import com.example.core.models.Eventofuncionario;
+import com.example.core.models.EventofuncionarioId;
+import com.example.core.repositories.EventoFuncionarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

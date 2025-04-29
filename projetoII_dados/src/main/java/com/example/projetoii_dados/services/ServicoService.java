@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Servico;
-import com.example.projetoii_dados.reps.ServicoRepository;
+import com.example.core.models.Servico;
+import com.example.core.repositories.ServicoRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

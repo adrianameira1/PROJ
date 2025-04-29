@@ -1,6 +1,6 @@
 package com.example.projetoii_dados.controllers;
 
-import com.example.projetoii_dados.models.Metodopagamento;
+import com.example.core.models.Metodopagamento;
 import com.example.projetoii_dados.services.MetodoPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

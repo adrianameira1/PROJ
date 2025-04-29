@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Funcaofuncionario;
-import com.example.projetoii_dados.reps.FuncaoFuncionarioRepository;
+import com.example.core.models.Funcaofuncionario;
+import com.example.core.repositories.FuncaoFuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

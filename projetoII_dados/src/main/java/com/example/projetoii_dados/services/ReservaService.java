@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Reserva;
-import com.example.projetoii_dados.reps.ReservaRepository;
+import com.example.core.models.Reserva;
+import com.example.core.repositories.ReservaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

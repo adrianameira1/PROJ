@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.controllers;
 
-import com.example.projetoii_dados.models.ServicoFornecedor;
-import com.example.projetoii_dados.models.ServicoFornecedorId;
+import com.example.core.models.ServicoFornecedor;
+import com.example.core.models.ServicoFornecedorId;
 import com.example.projetoii_dados.services.ServicoFornecedorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

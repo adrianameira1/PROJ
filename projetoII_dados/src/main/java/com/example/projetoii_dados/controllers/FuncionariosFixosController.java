@@ -1,6 +1,6 @@
 package com.example.projetoii_dados.controllers;
 
-import com.example.projetoii_dados.models.Funcionariosfixo;
+import com.example.core.models.Funcionariosfixo;
 import com.example.projetoii_dados.services.FuncionariosFixosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

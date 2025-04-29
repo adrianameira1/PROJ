@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.backoffice.Controllers.ReservaController">
+    <children>
+        <TableView fx:id="tabelaReservas" layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="colunaId" text="ID" prefWidth="50.0" />
+                <TableColumn fx:id="colunaNome" text="Nome" prefWidth="150.0" />
+                <TableColumn fx:id="colunaStatus" text="Status" prefWidth="150.0" />
+                <TableColumn fx:id="colunaNumeroConvidados" text="Nº Convidados" prefWidth="150.0" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

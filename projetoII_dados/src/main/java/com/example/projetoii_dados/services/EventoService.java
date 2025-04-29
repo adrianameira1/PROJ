@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
-import com.example.projetoii_dados.models.Evento;
-import com.example.projetoii_dados.reps.EventoRepository;
+import com.example.core.models.Evento;
+import com.example.core.repositories.EventoRepository;
 import org.springframework.stereotype.Service;
 
 

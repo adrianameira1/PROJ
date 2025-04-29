@@ -66,6 +66,12 @@
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.example</groupId> <!-- ou o groupId que estás a usar -->
+			<artifactId>core</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
 
 	</dependencies>
 

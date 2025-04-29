@@ -21,20 +21,34 @@ public class MainViewController {
     private Button chefeButton;
 
     @FXML
-    private void openLogin() throws IOException {
+    private void openLoginAdmin() throws IOException {
+        openLogin("admin");
+    }
+
+    @FXML
+    private void openLoginGestor() throws IOException {
+        openLogin("gestor");
+    }
+
+    @FXML
+    private void openLoginChefe() throws IOException {
+        openLogin("chefe");
+    }
+
+    private void openLogin(String userType) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
         Parent root = fxmlLoader.load();
+
+        LoginController controller = fxmlLoader.getController();
+        controller.setUserType(userType);
+
         Stage loginStage = new Stage();
         loginStage.setTitle("Login - Quinta Eventos");
-
-        // Definimos o tamanho diretamente aqui
-        loginStage.setScene(new Scene(root, 800, 600)); // largura 800px e altura 600px
-
+        loginStage.setScene(new Scene(root, 800, 600));
         loginStage.show();
 
-        // Fecha a janela atual (MainView)
+
         Stage currentStage = (Stage) adminButton.getScene().getWindow();
         currentStage.close();
     }
-
 }

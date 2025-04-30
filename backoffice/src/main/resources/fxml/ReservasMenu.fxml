@@ -26,11 +26,12 @@
 
     <TableView fx:id="tabelaReservas" prefHeight="400">
         <columns>
-            <TableColumn fx:id="colNome" text="Nome"/>
-            <TableColumn fx:id="colEmail" text="E-mail"/>
-            <TableColumn fx:id="colData" text="Data"/>
-            <TableColumn fx:id="colEstado" text="Estado"/>
-            <TableColumn fx:id="colAcoes" text="Ações"/>
+            <TableColumn fx:id="colunaId" text="ID"/>
+            <TableColumn fx:id="colunaNome" text="Nome"/>
+            <TableColumn fx:id="colunaStatus" text="Status"/>
+            <TableColumn fx:id="colunaData" text="Data"/>
+            <TableColumn fx:id="colunaNumeroConvidados" text="Nº Convidados"/>
         </columns>
     </TableView>
+
 </VBox>

@@ -1,4 +1,5 @@
 package com.backoffice.Controllers;
+import javafx.scene.Node;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,4 +44,32 @@ public class ResponsavelQuintaHomeController {
     private void abrirContratos() {
         abrirJanela("/fxml/ContratosMenu.fxml", "Gestão de Contratos");
     }
+
+
+    @FXML
+    private void terminarSessao(javafx.event.ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Login Inicial");
+            stage.show();
+
+            // Fecha a janela atual
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 }
+
+
+

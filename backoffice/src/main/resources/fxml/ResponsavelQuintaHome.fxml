@@ -5,17 +5,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.backoffice.Controllers.ResponsavelQuintaHomeController"
             stylesheets="@/styles/estilo.css"
             style="-fx-background-color: #E6E4D8;">
 
+    <!-- TOPO -->
     <top>
         <VBox alignment="CENTER" spacing="20">
-            <padding><Insets top="30" bottom="10"/></padding>
+            <padding><Insets top="40" bottom="10"/></padding>
 
-            <ImageView fitHeight="120" preserveRatio="true">
+            <!-- LOGO MAIOR -->
+            <ImageView fitHeight="170" preserveRatio="true">
                 <image>
                     <Image url="@/images/logo.png"/>
                 </image>
@@ -25,46 +28,72 @@
         </VBox>
     </top>
 
+    <!-- CENTRO -->
     <center>
-        <GridPane hgap="30" vgap="30" alignment="CENTER">
-            <padding><Insets top="20" bottom="40"/></padding>
+        <GridPane hgap="40" vgap="30" alignment="CENTER">
+            <padding><Insets top="30" bottom="40"/></padding>
 
-            <VBox styleClass="card" onMouseClicked="#abrirReservas" alignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0">
-                <ImageView fitHeight="50" preserveRatio="true">
+            <!-- CARD 1 -->
+            <VBox alignment="CENTER" spacing="10"
+                  onMouseClicked="#abrirReservas"
+                  style="-fx-background-color: #3C716B; -fx-background-radius: 20; -fx-padding: 15; -fx-cursor: hand;"
+                  GridPane.rowIndex="0" GridPane.columnIndex="0" prefWidth="150" prefHeight="150">
+                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
                     <image>
                         <Image url="@/images/icon_reservas.svg"/>
                     </image>
                 </ImageView>
-                <Label text="Reservas"/>
+                <Label text="Reservas" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
             </VBox>
 
-            <VBox styleClass="card" onMouseClicked="#abrirPagamentos" alignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="1">
-                <ImageView fitHeight="50" preserveRatio="true">
+            <!-- CARD 2 -->
+            <VBox alignment="CENTER" spacing="10"
+                  onMouseClicked="#abrirPagamentos"
+                  style="-fx-background-color: #3C716B; -fx-background-radius: 20; -fx-padding: 15; -fx-cursor: hand;"
+                  GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="150" prefHeight="150">
+                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
                     <image>
-                        <Image url="@/images/icon_pagamentos.svg"/>
+                        <Image url="/images/icon_pagamentos.svg"/>
                     </image>
                 </ImageView>
-                <Label text="Pagamentos"/>
+                <Label text="Pagamentos" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
             </VBox>
 
-            <VBox styleClass="card" onMouseClicked="#abrirFaturas" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                <ImageView fitHeight="50" preserveRatio="true">
+            <!-- CARD 3 -->
+            <VBox alignment="CENTER" spacing="10"
+                  onMouseClicked="#abrirFaturas"
+                  style="-fx-background-color: #3C716B; -fx-background-radius: 20; -fx-padding: 15; -fx-cursor: hand;"
+                  GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="150" prefHeight="150">
+                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
                     <image>
-                        <Image url="@/images/icon_faturas.svg"/>
+                        <Image url="/images/icon_faturas.svg"/>
                     </image>
                 </ImageView>
-                <Label text="Faturas"/>
+                <Label text="Faturas" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
             </VBox>
 
-            <VBox styleClass="card" onMouseClicked="#abrirContratos" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="1">
-                <ImageView fitHeight="50" preserveRatio="true">
+            <!-- CARD 4 -->
+            <VBox alignment="CENTER" spacing="10"
+                  onMouseClicked="#abrirContratos"
+                  style="-fx-background-color: #3C716B; -fx-background-radius: 20; -fx-padding: 15; -fx-cursor: hand;"
+                  GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="150" prefHeight="150">
+                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
                     <image>
-                        <Image url="@/images/icon_contratos.svg"/>
+                        <Image url="/images/icon_contratos.svg"/>
                     </image>
                 </ImageView>
-                <Label text="Contratos"/>
+                <Label text="Contratos" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
             </VBox>
-
         </GridPane>
     </center>
+
+    <!-- RODAPÉ -->
+    <bottom>
+        <HBox alignment="CENTER">
+            <padding><Insets top="10" bottom="20"/></padding>
+            <Button text="Terminar Sessão"
+                    onAction="#terminarSessao"
+                    style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 30; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;" />
+        </HBox>
+    </bottom>
 </BorderPane>

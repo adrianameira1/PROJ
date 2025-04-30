@@ -3,15 +3,15 @@ package com.backoffice.Controllers;
 import com.backoffice.Service.ReservaService;
 import com.backoffice.model.ReservaRow;
 import com.example.core.models.Reserva;
+import jakarta.annotation.PostConstruct;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import jakarta.annotation.PostConstruct;
 
 import java.util.List;
 
@@ -23,6 +23,7 @@ public class ReservasMenuController {
 
     @FXML private TextField filtroEmail;
     @FXML private ComboBox<String> comboTipoConta;
+
     @FXML private TableView<ReservaRow> tabelaReservas;
     @FXML private TableColumn<ReservaRow, String> colNome;
     @FXML private TableColumn<ReservaRow, String> colEmail;
@@ -45,13 +46,15 @@ public class ReservasMenuController {
         colEstado.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         colAcoes.setCellFactory(col -> new TableCell<>() {
-            private final Button btn = new Button("Marcar como Confirmada");
+            private final Button btn = new Button("Confirmar");
 
             {
                 btn.setOnAction(e -> {
                     ReservaRow reserva = getTableView().getItems().get(getIndex());
                     atualizarStatus(reserva);
                 });
+
+                btn.setStyle("-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 20;");
             }
 
             @Override
@@ -78,7 +81,6 @@ public class ReservasMenuController {
 
     @FXML
     private void filtrarReservas() {
-        // Filtro por email (simples, só como base)
         String filtro = filtroEmail.getText().toLowerCase();
         ObservableList<ReservaRow> filtradas = lista.filtered(r -> r.getEmail().toLowerCase().contains(filtro));
         tabelaReservas.setItems(filtradas);
@@ -86,8 +88,11 @@ public class ReservasMenuController {
 
     @FXML
     private void criarNovaReserva() {
-        // Aqui podes abrir outro FXML para preencher nova reserva
-        System.out.println("Abrir formulário de nova reserva (ainda por implementar)");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("Funcionalidade de nova reserva ainda não está implementada.");
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.showAndWait();
     }
 
     private void atualizarStatus(ReservaRow row) {

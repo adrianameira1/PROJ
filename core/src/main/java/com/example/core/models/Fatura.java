@@ -1,5 +1,6 @@
 package com.example.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "fatura")
 public class Fatura {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fatura_id_gen")
     @SequenceGenerator(name = "fatura_id_gen", sequenceName = "fatura_id_fatura_seq", allocationSize = 1)
@@ -32,12 +34,16 @@ public class Fatura {
     @JoinColumn(name = "id_evento", nullable = false)
     private Evento idEvento;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_tipofatura", nullable = false)
     private Tipofatura idTipofatura;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "idFatura")
     private Set<Recibo> recibos = new LinkedHashSet<>();
+
+    // Getters e setters
 
     public Integer getId() {
         return id;
@@ -102,5 +108,4 @@ public class Fatura {
     public void setRecibos(Set<Recibo> recibos) {
         this.recibos = recibos;
     }
-
 }

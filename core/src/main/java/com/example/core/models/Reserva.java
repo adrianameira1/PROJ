@@ -1,5 +1,6 @@
 package com.example.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reserva_id_gen")
     @SequenceGenerator(name = "reserva_id_gen", sequenceName = "reserva_id_reserva_seq", allocationSize = 1)
     @Column(name = "id_reserva", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
@@ -27,18 +28,20 @@ public class Reserva {
     @Column(name = "numeroconvidados")
     private Integer numeroconvidados;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente idCliente;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "idReserva")
     private Set<Evento> eventos = new LinkedHashSet<>();
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -33,7 +33,7 @@ public class LoginController {
 
                     if (u.getUsername().equalsIgnoreCase("adriana@quinta.com")) {
                         showAlert("Login como Responsável da Quinta efetuado!");
-                        openFXML("AdminHome.fxml");
+                        openFXML("ResponsavelQuintaHome.fxml");
                     } else if (u.getUsername().equalsIgnoreCase("carolina@quinta.com")) {
                         showAlert("Login como Gestor efetuado!");
                         openFXML("GestorHome.fxml");

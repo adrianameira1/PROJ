@@ -1,5 +1,6 @@
 package com.example.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,11 +10,13 @@ public class ServicoFornecedor {
     @EmbeddedId
     private ServicoFornecedorId id;
 
+    @JsonIgnore
     @MapsId("idFornecedor")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_fornecedor", nullable = false)
     private Fornecedore idFornecedor;
 
+    @JsonIgnore
     @MapsId("idServico")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_servico", nullable = false)

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.backoffice.Controllers.ReservasMenuController"
+      alignment="TOP_CENTER"
+      spacing="20"
+      stylesheets="@/styles/estilo.css"
+      style="-fx-background-color: #E6E4D8;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Gestão de Reservas" styleClass="title"/>
+
+    <HBox spacing="10">
+        <TextField fx:id="filtroEmail" promptText="Filtrar por e-mail"/>
+        <ComboBox fx:id="comboTipoConta" promptText="Tipo de Conta"/>
+        <Button text="Filtrar" onAction="#filtrarReservas"/>
+        <Button text="+ Nova Reserva" styleClass="botao-verde" onAction="#criarNovaReserva"/>
+    </HBox>
+
+    <TableView fx:id="tabelaReservas" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="colNome" text="Nome"/>
+            <TableColumn fx:id="colEmail" text="E-mail"/>
+            <TableColumn fx:id="colData" text="Data"/>
+            <TableColumn fx:id="colEstado" text="Estado"/>
+            <TableColumn fx:id="colAcoes" text="Ações"/>
+        </columns>
+    </TableView>
+</VBox>

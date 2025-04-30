@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.backoffice.Controllers.ResponsavelQuintaHomeController"
+            stylesheets="@/styles/estilo.css"
+            style="-fx-background-color: #E6E4D8;">
+
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <padding><Insets top="30" bottom="10"/></padding>
+
+            <ImageView fitHeight="120" preserveRatio="true">
+                <image>
+                    <Image url="@/images/logo.png"/>
+                </image>
+            </ImageView>
+
+            <Label text="Bem-vindo, Responsável da Quinta!" styleClass="title"/>
+        </VBox>
+    </top>
+
+    <center>
+        <GridPane hgap="30" vgap="30" alignment="CENTER">
+            <padding><Insets top="20" bottom="40"/></padding>
+
+            <VBox styleClass="card" onMouseClicked="#abrirReservas" alignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                <ImageView fitHeight="50" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/icon_reservas.svg"/>
+                    </image>
+                </ImageView>
+                <Label text="Reservas"/>
+            </VBox>
+
+            <VBox styleClass="card" onMouseClicked="#abrirPagamentos" alignment="CENTER" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                <ImageView fitHeight="50" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/icon_pagamentos.svg"/>
+                    </image>
+                </ImageView>
+                <Label text="Pagamentos"/>
+            </VBox>
+
+            <VBox styleClass="card" onMouseClicked="#abrirFaturas" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                <ImageView fitHeight="50" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/icon_faturas.svg"/>
+                    </image>
+                </ImageView>
+                <Label text="Faturas"/>
+            </VBox>
+
+            <VBox styleClass="card" onMouseClicked="#abrirContratos" alignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                <ImageView fitHeight="50" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/icon_contratos.svg"/>
+                    </image>
+                </ImageView>
+                <Label text="Contratos"/>
+            </VBox>
+
+        </GridPane>
+    </center>
+</BorderPane>

@@ -1,5 +1,6 @@
 package com.example.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,11 +10,14 @@ public class Eventofuncionario {
     @EmbeddedId
     private EventofuncionarioId id;
 
+
+    @JsonIgnore
     @MapsId("idEvento")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_evento", nullable = false)
     private Evento idEvento;
 
+    @JsonIgnore
     @MapsId("idFuncionario")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_funcionario", nullable = false)

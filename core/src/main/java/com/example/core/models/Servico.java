@@ -1,5 +1,6 @@
 package com.example.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -24,14 +25,17 @@ public class Servico {
     @Column(name = "custototal", precision = 10, scale = 2)
     private BigDecimal custototal;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_evento", nullable = false)
     private Evento idEvento;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_tiposervico", nullable = false)
     private Tiposervico idTiposervico;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "servicos")
     private Set<Fornecedore> fornecedores = new LinkedHashSet<>();
 

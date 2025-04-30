@@ -1,5 +1,6 @@
 package com.example.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -38,14 +39,17 @@ public class Recibo {
     @Column(name = "observacoes", length = Integer.MAX_VALUE)
     private String observacoes;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_fatura")
     private Fatura idFatura;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_fornecedores")
     private Fornecedore idFornecedores;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_metodo")
     private Metodopagamento idMetodo;

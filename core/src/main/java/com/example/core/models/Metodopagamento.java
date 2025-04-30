@@ -1,5 +1,6 @@
 package com.example.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.LinkedHashSet;
@@ -17,6 +18,7 @@ public class Metodopagamento {
     @Column(name = "designacao", nullable = false, length = 100)
     private String designacao;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "idMetodo")
     private Set<Recibo> recibos = new LinkedHashSet<>();
 

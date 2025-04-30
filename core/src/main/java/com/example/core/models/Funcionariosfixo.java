@@ -21,10 +21,12 @@ public class Funcionariosfixo {
     @Column(name = "contacto", length = 100)
     private String contacto;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_funcao", nullable = false)
     private Funcaofuncionario idFuncao;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "funcionariosfixos")
     private Set<Evento> eventos = new LinkedHashSet<>();
 

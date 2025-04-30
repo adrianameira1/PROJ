@@ -1,5 +1,6 @@
 package com.example.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.LinkedHashSet;
@@ -20,9 +21,11 @@ public class Fornecedore {
     @Column(name = "contacto", length = 100)
     private String contacto;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "idFornecedores")
     private Set<Recibo> recibos = new LinkedHashSet<>();
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "servico_fornecedor",
             joinColumns = @JoinColumn(name = "id_fornecedor"),

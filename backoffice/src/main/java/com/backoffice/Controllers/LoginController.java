@@ -1,14 +1,17 @@
 package com.backoffice.Controllers;
+
 import java.util.List;
 import com.backoffice.model.Utilizador;
 import com.backoffice.Service.ApiService;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
-import com.backoffice.Service.ApiService;
-
+import javafx.stage.Stage;
 
 public class LoginController {
 
@@ -27,24 +30,24 @@ public class LoginController {
 
             for (Utilizador u : utilizadores) {
                 if (u.getUsername().equalsIgnoreCase(inputUsername)) {
-                    String tipo = u.getIdTipouser().getDesignacao();
 
-                    if (tipo.equalsIgnoreCase("Administrador")) {
-                        tipo = "Responsável da Quinta";
-                        showAlert("Login como " + tipo + " efetuado!");
-                        // abrir HomeAdmin.fxml
-                    } else if (tipo.equalsIgnoreCase("Gestor")) {
+                    if (u.getUsername().equalsIgnoreCase("adriana@quinta.com")) {
+                        showAlert("Login como Responsável da Quinta efetuado!");
+                        openFXML("AdminHome.fxml");
+                    } else if (u.getUsername().equalsIgnoreCase("carolina@quinta.com")) {
                         showAlert("Login como Gestor efetuado!");
-                        // abrir HomeGestor.fxml
-                    } else if (tipo.equalsIgnoreCase("Chefe de Sala")) {
+                        openFXML("GestorHome.fxml");
+                    } else if (u.getUsername().equalsIgnoreCase("machado@quinta.com")) {
                         showAlert("Login como Chefe de Sala efetuado!");
-                        // abrir HomeChefeSala.fxml
+                        openFXML("ChefeSalaHome.fxml");
+                    } else {
+                        showAlert("Utilizador válido, mas função desconhecida.");
                     }
+
                     return;
                 }
             }
 
-            // se chegou aqui: username não encontrado
             showAlert("Utilizador não existe.");
 
         } catch (Exception e) {
@@ -53,12 +56,31 @@ public class LoginController {
         }
     }
 
+    private void openFXML(String fxmlFile) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFile));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Quinta Eventos - " + fxmlFile);
+            stage.show();
+
+            // fechar janela atual (login)
+            Stage currentStage = (Stage) usernameField.getScene().getWindow();
+            currentStage.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erro ao abrir a página: " + fxmlFile);
+        }
+    }
+
     private String tipoUtilizador;
 
     public void setUserType(String tipo) {
         this.tipoUtilizador = tipo;
         System.out.println("✅ Tipo de utilizador recebido: " + tipo);
-        // Aqui podes atualizar uma Label ou guardar para abrir a Home certa
     }
 
     private void showAlert(String msg) {
@@ -67,5 +89,4 @@ public class LoginController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
-
 }

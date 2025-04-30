@@ -1,10 +1,14 @@
 package com.example.core.models;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "utilizador")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Utilizador {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "utilizador_id_gen")
     @SequenceGenerator(name = "utilizador_id_gen", sequenceName = "utilizador_id_user_seq", allocationSize = 1)
@@ -17,35 +21,34 @@ public class Utilizador {
     @Column(name = "username", nullable = false, length = 50)
     private String username;
 
+    @Column(name = "password_hash", length = 100)
     private String passwordHash;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")
+    @JsonIgnore
     private Cliente idCliente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_funcionario")
+    @JsonIgnore
     private Funcionariosfixo idFuncionario;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipouser", nullable = false)
+    @JsonIgnore
     private Tipoutilizador idTipouser;
 
+    // Construtor vazio
+    public Utilizador() {}
+
+    // Getters e Setters
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public String getNome() {
@@ -62,6 +65,14 @@ public class Utilizador {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public Cliente getIdCliente() {
@@ -87,5 +98,4 @@ public class Utilizador {
     public void setIdTipouser(Tipoutilizador idTipouser) {
         this.idTipouser = idTipouser;
     }
-
 }

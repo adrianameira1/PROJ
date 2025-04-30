@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.Collections;
 import java.util.List;
 
 public class ApiService {
@@ -23,8 +24,14 @@ public class ApiService {
 
         ObjectMapper mapper = new ObjectMapper();
         System.out.println("RESPOSTA RECEBIDA:");
-        System.out.println(response.body()); // <-- aqui vais ver o JSON cru vindo da API
+        System.out.println(response.body());
 
-        return mapper.readValue(response.body(), new TypeReference<List<Utilizador>>() {});
+        // ADICIONAR VERIFICAÇÃO DE STATUS
+        if (response.statusCode() == 200) {
+            return mapper.readValue(response.body(), new TypeReference<List<Utilizador>>() {});
+        } else {
+            System.out.println("Erro ao buscar utilizadores. Status: " + response.statusCode());
+            return Collections.emptyList(); // ou podes lançar exceção, dependendo do que quiseres fazer
+        }
     }
 }

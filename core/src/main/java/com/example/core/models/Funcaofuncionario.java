@@ -1,6 +1,7 @@
 package com.example.core.models;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,6 +19,7 @@ public class Funcaofuncionario {
     private String designacao;
 
     @OneToMany(mappedBy = "idFuncao")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Set<Funcionariosfixo> funcionariosfixos = new LinkedHashSet<>();
 
     public Integer getId() {

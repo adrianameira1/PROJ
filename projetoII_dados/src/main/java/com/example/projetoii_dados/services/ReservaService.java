@@ -19,7 +19,7 @@ public class ReservaService {
         return reservaRepository.findAll();
     }
 
-    public Reserva findById(Long id) {
+    public Reserva findById(Integer id) {
         return reservaRepository.findById(id).orElse(null);
     }
 
@@ -27,7 +27,7 @@ public class ReservaService {
         return reservaRepository.save(reserva);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         reservaRepository.deleteById(id);
     }
 }

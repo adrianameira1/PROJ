@@ -6,9 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class MainViewController {
 
     @FXML

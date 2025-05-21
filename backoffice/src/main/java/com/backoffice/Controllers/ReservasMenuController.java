@@ -1,5 +1,6 @@
 package com.backoffice.Controllers;
 
+import com.backoffice.MainApp;
 import com.backoffice.Service.ReservaService;
 import com.backoffice.model.ReservaRow;
 import com.example.core.models.Reserva;
@@ -7,29 +8,33 @@ import jakarta.annotation.PostConstruct;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
-@Component
+
 public class ReservasMenuController {
 
-    @Autowired
+
     private ReservaService reservaService;
 
     @FXML private TextField filtroEmail;
     @FXML private ComboBox<String> comboTipoConta;
 
     @FXML private TableView<ReservaRow> tabelaReservas;
-    @FXML private TableColumn<ReservaRow, String> colNome;
-    @FXML private TableColumn<ReservaRow, String> colEmail;
-    @FXML private TableColumn<ReservaRow, String> colData;
-    @FXML private TableColumn<ReservaRow, String> colEstado;
-    @FXML private TableColumn<ReservaRow, Void> colAcoes;
+    @FXML private TableColumn<ReservaRow, Integer> colunaId;
+    @FXML private TableColumn<ReservaRow, String> colunaNome;
+    @FXML private TableColumn<ReservaRow, String> colunaStatus;
+    @FXML private TableColumn<ReservaRow, String> colunaData;
+    @FXML private TableColumn<ReservaRow, Integer> colunaNumeroConvidados;
 
     private ObservableList<ReservaRow> lista = FXCollections.observableArrayList();
 
@@ -40,41 +45,23 @@ public class ReservasMenuController {
     }
 
     private void configurarTabela() {
-        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        colData.setCellValueFactory(new PropertyValueFactory<>("data"));
-        colEstado.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-        colAcoes.setCellFactory(col -> new TableCell<>() {
-            private final Button btn = new Button("Confirmar");
-
-            {
-                btn.setOnAction(e -> {
-                    ReservaRow reserva = getTableView().getItems().get(getIndex());
-                    atualizarStatus(reserva);
-                });
-
-                btn.setStyle("-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 20;");
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(btn);
-                }
-            }
-        });
+        colunaId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colunaNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colunaStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colunaData.setCellValueFactory(new PropertyValueFactory<>("data"));
+        colunaNumeroConvidados.setCellValueFactory(new PropertyValueFactory<>("numeroConvidados"));
     }
 
     private void carregarReservas() {
         lista.clear();
         List<Reserva> reservas = reservaService.listarTodas();
         for (Reserva r : reservas) {
-            String email = (r.getIdCliente() != null) ? r.getIdCliente().getEmail() : "N/A";
-            lista.add(new ReservaRow(r.getNome(), email, r.getData(), r.getStatus()));
+            Integer id = r.getId();
+            String nome = r.getNome();
+            String status = r.getStatus();
+            String data = r.getData().toString();
+            Integer convidados = r.getNumeroconvidados();
+            lista.add(new ReservaRow(id, nome, status, data, convidados));
         }
         tabelaReservas.setItems(lista);
     }
@@ -82,28 +69,39 @@ public class ReservasMenuController {
     @FXML
     private void filtrarReservas() {
         String filtro = filtroEmail.getText().toLowerCase();
-        ObservableList<ReservaRow> filtradas = lista.filtered(r -> r.getEmail().toLowerCase().contains(filtro));
+        ObservableList<ReservaRow> filtradas = lista.filtered(r -> r.getNome().toLowerCase().contains(filtro));
         tabelaReservas.setItems(filtradas);
     }
 
     @FXML
     private void criarNovaReserva() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ReservaForm.fxml"));
+            loader.setControllerFactory(MainApp.getSpringContext()::getBean);
+            Parent root = loader.load();
+
+            ReservaFormController controller = loader.getController();
+            controller.setReservasMenuController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Nova Reserva");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro ao abrir o formulário de nova reserva.");
+        }
+    }
+
+    private void mostrarAlerta(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
-        alert.setContentText("Funcionalidade de nova reserva ainda não está implementada.");
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setContentText(mensagem);
         alert.showAndWait();
     }
 
-    private void atualizarStatus(ReservaRow row) {
-        List<Reserva> reservas = reservaService.listarTodas();
-        for (Reserva r : reservas) {
-            if (r.getNome().equals(row.getNome()) && r.getData().equals(row.getData())) {
-                r.setStatus("Confirmada");
-                reservaService.guardar(r);
-                carregarReservas();
-                break;
-            }
-        }
+    public void recarregarTabela() {
+        carregarReservas();
     }
 }

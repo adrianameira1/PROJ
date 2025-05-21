@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.backoffice.Controllers.ReservaFormController"
+      alignment="CENTER" spacing="15"
+      style="-fx-background-color: #E6E4D8;"
+      prefWidth="400" prefHeight="400">
+
+    <padding>
+        <Insets top="30" left="20" right="20" bottom="20" />
+    </padding>
+
+    <Label text="Adicionar / Editar Reserva"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3C716B;" />
+
+    <TextField fx:id="nomeField" promptText="Nome do Evento" />
+
+    <ComboBox fx:id="statusCombo" promptText="Status" />
+
+    <DatePicker fx:id="dataPicker" promptText="Data da Reserva" />
+
+    <TextField fx:id="convidadosField" promptText="Nº Convidados" />
+
+    <TextField fx:id="clienteIdField" promptText="ID do Cliente" />
+
+    <HBox spacing="10">
+        <Button text="Guardar"
+                onAction="#guardarReserva"
+                style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-font-weight: bold;" />
+        <Button text="Cancelar"
+                onAction="#cancelar"
+                style="-fx-background-color: darkred; -fx-text-fill: white; -fx-font-weight: bold;" />
+    </HBox>
+</VBox>

@@ -3,21 +3,23 @@ package com.backoffice.model;
 import java.time.LocalDate;
 
 public class ReservaRow {
+    private Integer id;
     private String nome;
-    private String email; // vem do Cliente relacionado
-    private LocalDate data;
     private String status;
+    private String data;
+    private Integer numeroConvidados;
 
-    public ReservaRow(String nome, String email, LocalDate data, String status) {
+    public ReservaRow(Integer id, String nome, String status, String data, Integer numeroConvidados) {
+        this.id = id;
         this.nome = nome;
-        this.email = email;
-        this.data = data;
         this.status = status;
+        this.data = data;
+        this.numeroConvidados = numeroConvidados;
     }
 
-    // Getters
+    public Integer getId() { return id; }
     public String getNome() { return nome; }
-    public String getEmail() { return email; }
-    public LocalDate getData() { return data; }
     public String getStatus() { return status; }
+    public String getData() { return data; }
+    public Integer getNumeroConvidados() { return numeroConvidados; }
 }

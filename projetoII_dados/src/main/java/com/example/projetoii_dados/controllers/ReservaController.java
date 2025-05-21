@@ -30,7 +30,7 @@ public class ReservaController {
     @Operation(summary = "Buscar reserva por ID",
             description = "Retorna uma reserva específica pelo seu ID. Caso não exista, retorna 404")
     @GetMapping("/{id}")
-    public ResponseEntity<Reserva> getReservaById(@PathVariable Long id) {
+    public ResponseEntity<Reserva> getReservaById(@PathVariable Integer id) {
         Reserva reserva = reservaService.findById(id);
         if (reserva == null) {
             return ResponseEntity.notFound().build();
@@ -49,7 +49,7 @@ public class ReservaController {
     @Operation(summary = "Atualizar reserva",
             description = "Atualiza os dados de uma reserva existente. Caso não exista, retorna 404")
     @PutMapping("/{id}")
-    public ResponseEntity<Reserva> updateReserva(@PathVariable Long id, @RequestBody Reserva reservaDetails) {
+    public ResponseEntity<Reserva> updateReserva(@PathVariable Integer id, @RequestBody Reserva reservaDetails) {
         Reserva existing = reservaService.findById(id);
         if (existing == null) {
             return ResponseEntity.notFound().build();
@@ -69,7 +69,7 @@ public class ReservaController {
     @Operation(summary = "Excluir reserva",
             description = "Remove uma reserva do sistema. Caso não exista, retorna 404")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReserva(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteReserva(@PathVariable Integer id) {
         Reserva existing = reservaService.findById(id);
         if (existing == null) {
             return ResponseEntity.notFound().build();

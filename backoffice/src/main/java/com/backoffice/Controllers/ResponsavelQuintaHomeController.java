@@ -15,6 +15,7 @@ public class ResponsavelQuintaHomeController {
     private void abrirJanela(String fxmlPath, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            loader.setControllerFactory(com.backoffice.MainApp.getSpringContext()::getBean); // <--- esta linha é essencial
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle(titulo);
@@ -25,6 +26,7 @@ public class ResponsavelQuintaHomeController {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void abrirPlaneamentoEvento() {

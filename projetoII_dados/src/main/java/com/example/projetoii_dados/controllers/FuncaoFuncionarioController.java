@@ -1,59 +1,64 @@
 package com.example.projetoii_dados.controllers;
 
 import com.example.core.models.Funcaofuncionario;
+import com.example.projetoii_dados.DTOs.FuncaoFuncionarioDTO;
 import com.example.projetoii_dados.services.FuncaoFuncionarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/funcao-funcionario")
+@RequestMapping("/api/funcoes")
+@Tag(name = "Funções de Funcionário", description = "Endpoints para manipular funções de funcionários")
 public class FuncaoFuncionarioController {
 
-    @Autowired
-    private FuncaoFuncionarioService service;
+    private final FuncaoFuncionarioService funcaoFuncionarioService;
+
+    public FuncaoFuncionarioController(FuncaoFuncionarioService funcaoFuncionarioService) {
+        this.funcaoFuncionarioService = funcaoFuncionarioService;
+    }
 
     @GetMapping
-    public List<Funcaofuncionario> getAll() {
-        return service.findAll();
+    public List<FuncaoFuncionarioDTO> getAll() {
+        return funcaoFuncionarioService.findAll().stream()
+                .map(f -> new FuncaoFuncionarioDTO(f.getDesignacao()))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Funcaofuncionario> getById(@PathVariable Long id) {
-        Funcaofuncionario ff = service.findById(id);
-        if (ff == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(ff);
+    public ResponseEntity<FuncaoFuncionarioDTO> getById(@PathVariable Integer id) {
+        Funcaofuncionario f = funcaoFuncionarioService.findById(id);
+        if (f == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(new FuncaoFuncionarioDTO(f.getDesignacao()));
     }
 
     @PostMapping
-    public Funcaofuncionario create(@RequestBody Funcaofuncionario ff) {
-        return service.save(ff);
+    public ResponseEntity<Void> create(@RequestBody FuncaoFuncionarioDTO dto) {
+        Funcaofuncionario f = new Funcaofuncionario();
+        f.setDesignacao(dto.getDesignacao());
+        funcaoFuncionarioService.save(f);
+        return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Funcaofuncionario> update(@PathVariable Long id,
-                                                    @RequestBody Funcaofuncionario ffDetails) {
-        Funcaofuncionario existing = service.findById(id);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
-        existing.setDesignacao(ffDetails.getDesignacao());
-        Funcaofuncionario updated = service.save(existing);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody FuncaoFuncionarioDTO dto) {
+        Funcaofuncionario existing = funcaoFuncionarioService.findById(id);
+        if (existing == null) return ResponseEntity.notFound().build();
+
+        existing.setDesignacao(dto.getDesignacao());
+        funcaoFuncionarioService.save(existing);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        Funcaofuncionario existing = service.findById(id);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
-        service.deleteById(id);
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        Funcaofuncionario existing = funcaoFuncionarioService.findById(id);
+        if (existing == null) return ResponseEntity.notFound().build();
+
+        funcaoFuncionarioService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
-

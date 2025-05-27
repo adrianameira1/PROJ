@@ -2,7 +2,6 @@ package com.example.projetoii_dados.services;
 
 import com.example.core.models.Utilizador;
 import com.example.core.repositories.UtilizadorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,22 +9,25 @@ import java.util.List;
 @Service
 public class UtilizadorService {
 
-    @Autowired
-    private UtilizadorRepository utilizadorRepository;
+    private final UtilizadorRepository repository;
 
-    public List<Utilizador> getAllUtilizadores() {
-        return utilizadorRepository.findAll();
+    public UtilizadorService(UtilizadorRepository repository) {
+        this.repository = repository;
     }
 
-    public Utilizador getUtilizadorById(Integer id) {
-        return utilizadorRepository.findById(id).orElse(null);
+    public List<Utilizador> findAll() {
+        return repository.findAll();
     }
 
-    public Utilizador saveUtilizador(Utilizador utilizador) {
-        return utilizadorRepository.save(utilizador);
+    public Utilizador findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 
-    public void deleteUtilizador(Integer id) {
-        utilizadorRepository.deleteById(id);
+    public Utilizador save(Utilizador utilizador) {
+        return repository.save(utilizador);
+    }
+
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
     }
 }

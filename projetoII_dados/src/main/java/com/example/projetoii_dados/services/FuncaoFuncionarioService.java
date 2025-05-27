@@ -2,7 +2,6 @@ package com.example.projetoii_dados.services;
 
 import com.example.core.models.Funcaofuncionario;
 import com.example.core.repositories.FuncaoFuncionarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,23 +9,25 @@ import java.util.List;
 @Service
 public class FuncaoFuncionarioService {
 
-    @Autowired
-    private FuncaoFuncionarioRepository repository;
+    private final FuncaoFuncionarioRepository repository;
+
+    public FuncaoFuncionarioService(FuncaoFuncionarioRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Funcaofuncionario> findAll() {
         return repository.findAll();
     }
 
-    public Funcaofuncionario findById(Long id) {
+    public Funcaofuncionario findById(Integer id) {
         return repository.findById(id).orElse(null);
     }
 
-    public Funcaofuncionario save(Funcaofuncionario entity) {
-        return repository.save(entity);
+    public Funcaofuncionario save(Funcaofuncionario f) {
+        return repository.save(f);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         repository.deleteById(id);
     }
 }
-

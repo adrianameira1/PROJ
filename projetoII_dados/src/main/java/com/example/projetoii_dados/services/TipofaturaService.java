@@ -1,7 +1,7 @@
 package com.example.projetoii_dados.services;
 
 import com.example.core.models.Tipofatura;
-import com.example.core.repositories.TipoFaturaRepository;
+import com.example.core.repositories.TipofaturaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,25 +9,25 @@ import java.util.List;
 @Service
 public class TipofaturaService {
 
-    private final TipoFaturaRepository tipofaturaRepository;
+    private final TipofaturaRepository repository;
 
-    public TipofaturaService(TipoFaturaRepository tipofaturaRepository) {
-        this.tipofaturaRepository = tipofaturaRepository;
+    public TipofaturaService(TipofaturaRepository repository) {
+        this.repository = repository;
     }
 
     public List<Tipofatura> findAll() {
-        return tipofaturaRepository.findAll();
+        return repository.findAll();
     }
 
-    public Tipofatura findById(Long id) {
-        return tipofaturaRepository.findById(id).orElse(null);
+    public Tipofatura findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 
     public Tipofatura save(Tipofatura tipofatura) {
-        return tipofaturaRepository.save(tipofatura);
+        return repository.save(tipofatura);
     }
 
-    public void deleteById(Long id) {
-        tipofaturaRepository.deleteById(id);
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
     }
 }

@@ -2,17 +2,18 @@ package com.example.projetoii_dados.controllers;
 
 import com.example.core.models.Eventofuncionario;
 import com.example.core.models.EventofuncionarioId;
+import com.example.projetoii_dados.dtos.EventoFuncionarioDTO;
 import com.example.projetoii_dados.services.EventoFuncionarioService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/evento-funcionario")
-@Tag(name = "EventoFuncionario", description = "Endpoints para associação de Evento e Funcionários (N:N)")
+@Tag(name = "EventoFuncionario", description = "Associação entre Evento e Funcionário Fixo")
 public class EventoFuncionarioController {
 
     private final EventoFuncionarioService eventoFuncionarioService;
@@ -21,50 +22,32 @@ public class EventoFuncionarioController {
         this.eventoFuncionarioService = eventoFuncionarioService;
     }
 
-    @Operation(summary = "Listar todas as associações Evento-Funcionário",
-            description = "Retorna a lista de todas as relações entre eventos e funcionários fixos")
     @GetMapping
-    public List<Eventofuncionario> getAll() {
-        return eventoFuncionarioService.findAll();
+    public List<EventoFuncionarioDTO> getAll() {
+        return eventoFuncionarioService.findAll().stream()
+                .map(ef -> new EventoFuncionarioDTO(ef.getIdEvento(), ef.getIdFuncionario()))
+                .collect(Collectors.toList());
     }
 
-    @Operation(summary = "Buscar associação por ID composto",
-            description = "Retorna a associação especificada pelos IDs (Evento, Funcionário). Caso não exista, retorna 404")
     @GetMapping("/evento/{eventoId}/funcionario/{funcionarioId}")
-    public ResponseEntity<Eventofuncionario> getById(
-            @PathVariable Integer eventoId,
-            @PathVariable Integer funcionarioId
-    ) {
-        EventofuncionarioId efId = new EventofuncionarioId(eventoId, funcionarioId);
-        Eventofuncionario ef = eventoFuncionarioService.findById(efId);
-        if (ef == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(ef);
+    public ResponseEntity<EventoFuncionarioDTO> getById(@PathVariable Integer eventoId, @PathVariable Integer funcionarioId) {
+        Eventofuncionario ef = eventoFuncionarioService.findById(new EventofuncionarioId(eventoId, funcionarioId));
+        if (ef == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(new EventoFuncionarioDTO(ef.getIdEvento(), ef.getIdFuncionario()));
     }
 
-    @Operation(summary = "Criar nova associação Evento-Funcionário",
-            description = "Cria uma nova relação entre um evento e um funcionário fixo")
     @PostMapping
-    public ResponseEntity<Eventofuncionario> create(@RequestBody Eventofuncionario ef) {
-        // Supondo que o body traga o 'id' ou as referências de 'evento' e 'funcionario'.
-        Eventofuncionario novo = eventoFuncionarioService.save(ef);
-        return ResponseEntity.ok(novo);
+    public ResponseEntity<Void> create(@RequestBody EventoFuncionarioDTO dto) {
+        Eventofuncionario ef = new Eventofuncionario(dto.getIdEvento(), dto.getIdFuncionario());
+        eventoFuncionarioService.save(ef);
+        return ResponseEntity.status(201).build();
     }
 
-    @Operation(summary = "Excluir associação Evento-Funcionário",
-            description = "Remove a associação pelo ID composto (evento e funcionário). Caso não exista, retorna 404")
     @DeleteMapping("/evento/{eventoId}/funcionario/{funcionarioId}")
-    public ResponseEntity<Void> delete(
-            @PathVariable Integer eventoId,
-            @PathVariable Integer funcionarioId
-    ) {
-        EventofuncionarioId efId = new EventofuncionarioId(eventoId, funcionarioId);
-        Eventofuncionario existing = eventoFuncionarioService.findById(efId);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
-        eventoFuncionarioService.deleteById(efId);
+    public ResponseEntity<Void> delete(@PathVariable Integer eventoId, @PathVariable Integer funcionarioId) {
+        Eventofuncionario ef = eventoFuncionarioService.findById(new EventofuncionarioId(eventoId, funcionarioId));
+        if (ef == null) return ResponseEntity.notFound().build();
+        eventoFuncionarioService.deleteById(new EventofuncionarioId(eventoId, funcionarioId));
         return ResponseEntity.noContent().build();
     }
 }

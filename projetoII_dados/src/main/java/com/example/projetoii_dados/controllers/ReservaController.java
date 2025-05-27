@@ -1,13 +1,16 @@
 package com.example.projetoii_dados.controllers;
 
+import com.example.core.models.Cliente;
 import com.example.core.models.Reserva;
+import com.example.core.repositories.ClienteRepository;
+import com.example.projetoii_dados.DTOs.ReservaDTO;
 import com.example.projetoii_dados.services.ReservaService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reservas")
@@ -15,65 +18,77 @@ import java.util.List;
 public class ReservaController {
 
     private final ReservaService reservaService;
+    private final ClienteRepository clienteRepository;
 
-    public ReservaController(ReservaService reservaService) {
+    public ReservaController(ReservaService reservaService, ClienteRepository clienteRepository) {
         this.reservaService = reservaService;
+        this.clienteRepository = clienteRepository;
     }
 
-    @Operation(summary = "Listar todas as reservas",
-            description = "Retorna uma lista de todas as reservas cadastradas")
     @GetMapping
-    public List<Reserva> getAllReservas() {
-        return reservaService.findAll();
+    public List<ReservaDTO> getAll() {
+        return reservaService.findAll().stream()
+                .map(r -> new ReservaDTO(
+                        r.getNome(),
+                        r.getStatus(),
+                        r.getData(),
+                        r.getNumeroconvidados(),
+                        r.getIdCliente().getId()
+                )).collect(Collectors.toList());
     }
 
-    @Operation(summary = "Buscar reserva por ID",
-            description = "Retorna uma reserva específica pelo seu ID. Caso não exista, retorna 404")
     @GetMapping("/{id}")
-    public ResponseEntity<Reserva> getReservaById(@PathVariable Long id) {
-        Reserva reserva = reservaService.findById(id);
-        if (reserva == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(reserva);
+    public ResponseEntity<ReservaDTO> getById(@PathVariable Integer id) {
+        Reserva r = reservaService.findById(id);
+        if (r == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(new ReservaDTO(
+                r.getNome(),
+                r.getStatus(),
+                r.getData(),
+                r.getNumeroconvidados(),
+                r.getIdCliente().getId()
+        ));
     }
 
-    @Operation(summary = "Criar nova reserva",
-            description = "Cria uma nova reserva e retorna a reserva criada")
     @PostMapping
-    public ResponseEntity<Reserva> createReserva(@RequestBody Reserva reserva) {
-        Reserva nova = reservaService.save(reserva);
-        return ResponseEntity.ok(nova);
+    public ResponseEntity<Void> create(@RequestBody ReservaDTO dto) {
+        Cliente cliente = clienteRepository.findById(dto.getIdCliente()).orElse(null);
+        if (cliente == null) return ResponseEntity.badRequest().build();
+
+        Reserva r = new Reserva();
+        r.setNome(dto.getNome());
+        r.setStatus(dto.getStatus());
+        r.setData(dto.getData());
+        r.setNumeroconvidados(dto.getNumeroconvidados());
+        r.setIdCliente(cliente);
+
+        reservaService.save(r);
+        return ResponseEntity.status(201).build();
     }
 
-    @Operation(summary = "Atualizar reserva",
-            description = "Atualiza os dados de uma reserva existente. Caso não exista, retorna 404")
     @PutMapping("/{id}")
-    public ResponseEntity<Reserva> updateReserva(@PathVariable Long id, @RequestBody Reserva reservaDetails) {
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody ReservaDTO dto) {
         Reserva existing = reservaService.findById(id);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
+        if (existing == null) return ResponseEntity.notFound().build();
 
-        // Exemplo de atualização:
-        existing.setNome(reservaDetails.getNome());
-        existing.setStatus(reservaDetails.getStatus());
-        existing.setData(reservaDetails.getData());
-        existing.setNumeroconvidados(reservaDetails.getNumeroconvidados());
-        existing.setIdCliente(reservaDetails.getIdCliente());
+        Cliente cliente = clienteRepository.findById(dto.getIdCliente()).orElse(null);
+        if (cliente == null) return ResponseEntity.badRequest().build();
 
-        Reserva atualizada = reservaService.save(existing);
-        return ResponseEntity.ok(atualizada);
+        existing.setNome(dto.getNome());
+        existing.setStatus(dto.getStatus());
+        existing.setData(dto.getData());
+        existing.setNumeroconvidados(dto.getNumeroconvidados());
+        existing.setIdCliente(cliente);
+
+        reservaService.save(existing);
+        return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Excluir reserva",
-            description = "Remove uma reserva do sistema. Caso não exista, retorna 404")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReserva(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Reserva existing = reservaService.findById(id);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
+        if (existing == null) return ResponseEntity.notFound().build();
+
         reservaService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

@@ -1,15 +1,17 @@
 package com.example.projetoii_dados.controllers;
+
 import com.example.core.models.Cliente;
+import com.example.projetoii_dados.DTOs.ClienteDTO;
 import com.example.projetoii_dados.services.ClienteService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/clientes")  // URL base para "Cliente"
+@RequestMapping("/api/clientes")
 @Tag(name = "Clientes", description = "Endpoints para manipular clientes")
 public class ClienteController {
 
@@ -19,52 +21,48 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @Operation(summary = "Listar todos os clientes",
-            description = "Retorna uma lista de todos os clientes cadastrados")
     @GetMapping
-    public List<Cliente> getAllClientes() {
-        return clienteService.findAll();
+    public List<ClienteDTO> getAllClientes() {
+        return clienteService.findAll().stream()
+                .map(c -> new ClienteDTO(c.getNome(), c.getEmail(), c.getTelefone()))
+                .collect(Collectors.toList());
     }
 
-    @Operation(summary = "Buscar cliente por ID",
-            description = "Retorna um cliente específico pelo seu ID. Caso não exista, retorna 404")
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getClienteById(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable Integer id) {
         Cliente cliente = clienteService.findById(id);
         if (cliente == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(cliente);
+        ClienteDTO dto = new ClienteDTO(cliente.getNome(), cliente.getEmail(), cliente.getTelefone());
+        return ResponseEntity.ok(dto);
     }
 
-    @Operation(summary = "Criar novo cliente",
-            description = "Cria um novo cliente no sistema e retorna o cliente criado")
     @PostMapping
-    public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
-        Cliente novo = clienteService.save(cliente);
-        return ResponseEntity.ok(novo);
+    public ResponseEntity<Void> createCliente(@RequestBody ClienteDTO dto) {
+        Cliente cliente = new Cliente();
+        cliente.setNome(dto.getNome());
+        cliente.setEmail(dto.getEmail());
+        cliente.setTelefone(dto.getTelefone());
+        clienteService.save(cliente);
+        return ResponseEntity.status(201).build();
     }
 
-    @Operation(summary = "Atualizar cliente",
-            description = "Atualiza os dados de um cliente existente pelo ID. Caso não exista, retorna 404")
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente clienteDetails) {
+    public ResponseEntity<Void> updateCliente(@PathVariable Integer id, @RequestBody ClienteDTO dto) {
         Cliente existing = clienteService.findById(id);
         if (existing == null) {
             return ResponseEntity.notFound().build();
         }
-        existing.setNome(clienteDetails.getNome());
-        existing.setEmail(clienteDetails.getEmail());
-        existing.setTelefone(clienteDetails.getTelefone());
-
-        Cliente atualizado = clienteService.save(existing);
-        return ResponseEntity.ok(atualizado);
+        existing.setNome(dto.getNome());
+        existing.setEmail(dto.getEmail());
+        existing.setTelefone(dto.getTelefone());
+        clienteService.save(existing);
+        return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Excluir cliente",
-            description = "Remove um cliente do sistema pelo ID. Caso não exista, retorna 404")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCliente(@PathVariable Integer id) {
         Cliente existing = clienteService.findById(id);
         if (existing == null) {
             return ResponseEntity.notFound().build();

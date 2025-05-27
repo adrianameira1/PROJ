@@ -6,9 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
+@Component
 public class ResponsavelQuintaHomeController {
 
     private void abrirJanela(String fxmlPath, String titulo) {
@@ -26,23 +27,21 @@ public class ResponsavelQuintaHomeController {
     }
 
     @FXML
-    private void abrirReservas() {
-        abrirJanela("/fxml/ReservasMenu.fxml", "Gestão de Reservas");
+    private void abrirPlaneamentoEvento() {
+        abrirJanela("/fxml/ReservasMenu.fxml", "Gestão de Eventos");
     }
 
     @FXML
-    private void abrirPagamentos() {
-        abrirJanela("/fxml/PagamentosMenu.fxml", "Gestão de Pagamentos");
+    private void abrirOrcamentos() { abrirJanela("/fxml/PagamentosMenu.fxml", "Orçamentos de Eventos");
     }
 
     @FXML
-    private void abrirFaturas() {
-        abrirJanela("/fxml/FaturasMenu.fxml", "Gestão de Faturas");
+    private void abrirFornecedores() {
+        abrirJanela("/fxml/FaturasMenu.fxml", "Gestão de Fornecedores");
     }
 
     @FXML
-    private void abrirContratos() {
-        abrirJanela("/fxml/ContratosMenu.fxml", "Gestão de Contratos");
+    private void abrirContatoClientes() { abrirJanela("/fxml/ContratosMenu.fxml", "Contactar Clientes");
     }
 
 

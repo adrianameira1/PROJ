@@ -1,50 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <!-- POM pai / agregador -->
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
-    <artifactId>PROJ</artifactId>
+    <!-- herdamos do parent oficial do Spring-Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.3</version>
+    </parent>
+
+    <groupId>com.example</groupId>          <!-- escolhe o teu -->
+    <artifactId>PROJ</artifactId>           <!-- mantém o mesmo usado nos filhos -->
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>backoffice</module>
-        <module>frontend</module>
-        <module>projetoii_dados</module>
-        <module>core</module>
-    </modules>
-
-    <!-- Versão comum do Spring Boot para todos os módulos -->
+    <!-- propriedades comuns -->
     <properties>
-        <java.version>17</java.version> <!-- ou a tua versão real -->
-        <spring-boot.version>3.2.0</spring-boot.version>
+        <java.version>17</java.version>
     </properties>
 
-    <!-- Gestão centralizada das dependências -->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <!-- lista de sub-módulos -->
+    <modules>
+        <module>core</module>
+        <module>projetoii_dados</module>    <!-- ajusta se o nome da pasta diferir -->
+        <module>backoffice</module>
+        <module>frontend</module>
+    </modules>
 
-    <!-- Plugin do Spring Boot disponível para todos os módulos -->
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
+    <!-- nada mais é necessário: plugins e BOM vêm do parent Spring-Boot -->
 </project>

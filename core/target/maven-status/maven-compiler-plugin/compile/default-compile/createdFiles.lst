@@ -1,8 +1,11 @@
 com\example\core\repositories\MetodoPagamentoRepository.class
+com\example\core\repositories\TipofaturaRepository.class
 com\example\core\models\Evento.class
+com\example\core\repositories\FornecedorRepository.class
 com\example\core\models\Eventofuncionario.class
 com\example\core\repositories\TipoEventoRepository.class
 com\example\core\models\EventofuncionarioId.class
+com\example\core\models\Fornecedor.class
 com\example\core\models\Tipoutilizador.class
 com\example\core\models\Metodopagamento.class
 com\example\core\models\Tiposervico.class
@@ -18,13 +21,10 @@ com\example\core\repositories\ServicoRepository.class
 com\example\core\models\Cliente.class
 com\example\core\models\Tipoevento.class
 com\example\core\models\Funcaofuncionario.class
-com\example\core\models\Fornecedore.class
-com\example\core\repositories\FornecedoresRepository.class
 com\example\core\repositories\ClienteRepository.class
 com\example\core\repositories\EventoRepository.class
 com\example\core\repositories\FuncionariosFixosRepository.class
 com\example\core\models\ServicoFornecedorId.class
-com\example\core\repositories\TipoFaturaRepository.class
 com\example\core\models\Utilizador.class
 com\example\core\repositories\ReciboRepository.class
 com\example\core\repositories\UtilizadorRepository.class

@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "fornecedores")
-public class Fornecedore {
+public class Fornecedor {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fornecedores_id_gen")
     @SequenceGenerator(name = "fornecedores_id_gen", sequenceName = "fornecedores_id_fornecedor_seq", allocationSize = 1)

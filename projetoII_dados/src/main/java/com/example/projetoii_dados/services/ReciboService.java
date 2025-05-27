@@ -9,25 +9,25 @@ import java.util.List;
 @Service
 public class ReciboService {
 
-    private final ReciboRepository reciboRepository;
+    private final ReciboRepository repository;
 
-    public ReciboService(ReciboRepository reciboRepository) {
-        this.reciboRepository = reciboRepository;
+    public ReciboService(ReciboRepository repository) {
+        this.repository = repository;
     }
 
     public List<Recibo> findAll() {
-        return reciboRepository.findAll();
+        return repository.findAll();
     }
 
-    public Recibo findById(Long id) {
-        return reciboRepository.findById(id).orElse(null);
+    public Recibo findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 
     public Recibo save(Recibo recibo) {
-        return reciboRepository.save(recibo);
+        return repository.save(recibo);
     }
 
-    public void deleteById(Long id) {
-        reciboRepository.deleteById(id);
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
     }
 }

@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FuncaoFuncionarioRepository extends JpaRepository<Funcaofuncionario, Long> {
+public interface FuncaoFuncionarioRepository extends JpaRepository<Funcaofuncionario, Integer> {
 }

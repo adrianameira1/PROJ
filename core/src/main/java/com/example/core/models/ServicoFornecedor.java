@@ -14,7 +14,7 @@ public class ServicoFornecedor {
     @MapsId("idFornecedor")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_fornecedor", nullable = false)
-    private Fornecedore idFornecedor;
+    private Fornecedor idFornecedor;
 
     @JsonIgnore
     @MapsId("idServico")
@@ -30,11 +30,11 @@ public class ServicoFornecedor {
         this.id = id;
     }
 
-    public Fornecedore getIdFornecedor() {
+    public Fornecedor getIdFornecedor() {
         return idFornecedor;
     }
 
-    public void setIdFornecedor(Fornecedore idFornecedor) {
+    public void setIdFornecedor(Fornecedor idFornecedor) {
         this.idFornecedor = idFornecedor;
     }
 

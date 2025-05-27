@@ -24,7 +24,7 @@ public class ReservaService {
     }
 
     // Eliminar reserva (opcional)
-    public void eliminar(Long id) {
+    public void eliminar(Integer id) {
         reservaRepository.deleteById(id);
     }
 }

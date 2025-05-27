@@ -9,6 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tipofatura")
 public class Tipofatura {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tipofatura_id_gen")
     @SequenceGenerator(name = "tipofatura_id_gen", sequenceName = "tipofatura_id_tipofatura_seq", allocationSize = 1)
@@ -21,6 +22,14 @@ public class Tipofatura {
     @JsonIgnore
     @OneToMany(mappedBy = "idTipofatura")
     private Set<Fatura> faturas = new LinkedHashSet<>();
+
+    // Construtor vazio obrigatório para JPA e Swagger
+    public Tipofatura() {}
+
+    // Construtor opcional
+    public Tipofatura(String designacao) {
+        this.designacao = designacao;
+    }
 
     public Integer getId() {
         return id;
@@ -45,5 +54,4 @@ public class Tipofatura {
     public void setFaturas(Set<Fatura> faturas) {
         this.faturas = faturas;
     }
-
 }

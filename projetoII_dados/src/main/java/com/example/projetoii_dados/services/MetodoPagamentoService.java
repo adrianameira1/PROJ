@@ -2,7 +2,6 @@ package com.example.projetoii_dados.services;
 
 import com.example.core.models.Metodopagamento;
 import com.example.core.repositories.MetodoPagamentoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,23 +9,25 @@ import java.util.List;
 @Service
 public class MetodoPagamentoService {
 
-    @Autowired
-    private MetodoPagamentoRepository repository;
+    private final MetodoPagamentoRepository repository;
+
+    public MetodoPagamentoService(MetodoPagamentoRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Metodopagamento> findAll() {
         return repository.findAll();
     }
 
-    public Metodopagamento findById(Long id) {
+    public Metodopagamento findById(Integer id) {
         return repository.findById(id).orElse(null);
     }
 
-    public Metodopagamento save(Metodopagamento mp) {
-        return repository.save(mp);
+    public Metodopagamento save(Metodopagamento m) {
+        return repository.save(m);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         repository.deleteById(id);
     }
 }
-

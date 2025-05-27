@@ -19,7 +19,7 @@ public class FaturaService {
         return faturaRepository.findAll();
     }
 
-    public Fatura findById(Long id) {
+    public Fatura findById(Integer id) {
         return faturaRepository.findById(id).orElse(null);
     }
 
@@ -27,7 +27,7 @@ public class FaturaService {
         return faturaRepository.save(fatura);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         faturaRepository.deleteById(id);
     }
 }

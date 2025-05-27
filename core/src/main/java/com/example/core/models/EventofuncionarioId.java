@@ -1,42 +1,30 @@
 package com.example.core.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import java.io.Serializable;
+import java.util.Objects;
 
-@Embeddable
-public class EventofuncionarioId implements java.io.Serializable {
-    private static final long serialVersionUID = -4820851459733619871L;
-
-    @Column(name = "id_evento", nullable = false)
+public class EventofuncionarioId implements Serializable {
     private Integer idEvento;
-
-    @Column(name = "id_funcionario", nullable = false)
     private Integer idFuncionario;
 
-    // Construtor SEM argumentos (caso o JPA precise)
-    public EventofuncionarioId() {
-    }
+    public EventofuncionarioId() {}
 
-    // Construtor COM os dois parâmetros
     public EventofuncionarioId(Integer idEvento, Integer idFuncionario) {
         this.idEvento = idEvento;
         this.idFuncionario = idFuncionario;
     }
 
-    public Integer getIdEvento() {
-        return idEvento;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EventofuncionarioId)) return false;
+        EventofuncionarioId that = (EventofuncionarioId) o;
+        return Objects.equals(idEvento, that.idEvento) &&
+                Objects.equals(idFuncionario, that.idFuncionario);
     }
 
-    public void setIdEvento(Integer idEvento) {
-        this.idEvento = idEvento;
+    @Override
+    public int hashCode() {
+        return Objects.hash(idEvento, idFuncionario);
     }
-
-    public Integer getIdFuncionario() {
-        return idFuncionario;
-    }
-
-    public void setIdFuncionario(Integer idFuncionario) {
-        this.idFuncionario = idFuncionario;
-    }
-
 }

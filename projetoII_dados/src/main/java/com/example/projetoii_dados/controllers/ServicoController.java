@@ -1,13 +1,18 @@
 package com.example.projetoii_dados.controllers;
 
+import com.example.core.models.Evento;
 import com.example.core.models.Servico;
+import com.example.core.models.Tiposervico;
+import com.example.core.repositories.EventoRepository;
+import com.example.core.repositories.TipoServicoRepository;
+import com.example.projetoii_dados.DTOs.ServicoDTO;
 import com.example.projetoii_dados.services.ServicoService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/servicos")
@@ -15,63 +20,84 @@ import java.util.List;
 public class ServicoController {
 
     private final ServicoService servicoService;
+    private final EventoRepository eventoRepository;
+    private final TipoServicoRepository tiposervicoRepository;
 
-    public ServicoController(ServicoService servicoService) {
+    public ServicoController(ServicoService servicoService,
+                             EventoRepository eventoRepository,
+                             TipoServicoRepository tiposervicoRepository) {
         this.servicoService = servicoService;
+        this.eventoRepository = eventoRepository;
+        this.tiposervicoRepository = tiposervicoRepository;
     }
 
-    @Operation(summary = "Listar todos os serviços",
-            description = "Retorna uma lista de todos os serviços cadastrados")
     @GetMapping
-    public List<Servico> getAllServicos() {
-        return servicoService.findAll();
+    public List<ServicoDTO> getAll() {
+        return servicoService.findAll().stream()
+                .map(s -> new ServicoDTO(
+                        s.getStatuspagamento(),
+                        s.getDetalhesservico(),
+                        s.getCustototal(),
+                        s.getIdEvento().getId(),
+                        s.getIdTiposervico().getId()
+                )).collect(Collectors.toList());
     }
 
-    @Operation(summary = "Buscar serviço por ID",
-            description = "Retorna um serviço específico pelo seu ID. Caso não exista, retorna 404")
     @GetMapping("/{id}")
-    public ResponseEntity<Servico> getServicoById(@PathVariable Long id) {
-        Servico servico = servicoService.findById(id);
-        if (servico == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(servico);
+    public ResponseEntity<ServicoDTO> getById(@PathVariable Integer id) {
+        Servico s = servicoService.findById(id);
+        if (s == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(new ServicoDTO(
+                s.getStatuspagamento(),
+                s.getDetalhesservico(),
+                s.getCustototal(),
+                s.getIdEvento().getId(),
+                s.getIdTiposervico().getId()
+        ));
     }
 
-    @Operation(summary = "Criar novo serviço",
-            description = "Cria um novo serviço no sistema e retorna o serviço criado")
     @PostMapping
-    public ResponseEntity<Servico> createServico(@RequestBody Servico servico) {
-        Servico novo = servicoService.save(servico);
-        return ResponseEntity.ok(novo);
+    public ResponseEntity<Void> create(@RequestBody ServicoDTO dto) {
+        Evento evento = eventoRepository.findById(dto.getIdEvento()).orElse(null);
+        Tiposervico tipo = tiposervicoRepository.findById(dto.getIdTiposervico().intValue()).orElse(null);
+        if (evento == null || tipo == null) return ResponseEntity.badRequest().build();
+
+        Servico s = new Servico();
+        s.setStatuspagamento(dto.getStatuspagamento());
+        s.setDetalhesservico(dto.getDetalhesservico());
+        s.setCustototal(dto.getCustototal());
+        s.setIdEvento(evento);
+        s.setIdTiposervico(tipo);
+
+        servicoService.save(s);
+        return ResponseEntity.status(201).build();
     }
 
-    @Operation(summary = "Atualizar serviço",
-            description = "Atualiza os dados de um serviço existente. Caso não exista, retorna 404")
     @PutMapping("/{id}")
-    public ResponseEntity<Servico> updateServico(@PathVariable Long id, @RequestBody Servico servicoDetails) {
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody ServicoDTO dto) {
         Servico existing = servicoService.findById(id);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
-        existing.setStatuspagamento(servicoDetails.getStatuspagamento());
-        existing.setDetalhesservico(servicoDetails.getDetalhesservico());
-        existing.setCustototal(servicoDetails.getCustototal());
-        existing.setIdEvento(servicoDetails.getIdEvento());
-        existing.setIdTiposervico(servicoDetails.getIdTiposervico());
+        if (existing == null) return ResponseEntity.notFound().build();
 
-        Servico atualizado = servicoService.save(existing);
-        return ResponseEntity.ok(atualizado);
+        Evento evento = eventoRepository.findById(dto.getIdEvento()).orElse(null);
+        Tiposervico tipo = tiposervicoRepository.findById(dto.getIdTiposervico().intValue()).orElse(null);
+        if (evento == null || tipo == null) return ResponseEntity.badRequest().build();
+
+        existing.setStatuspagamento(dto.getStatuspagamento());
+        existing.setDetalhesservico(dto.getDetalhesservico());
+        existing.setCustototal(dto.getCustototal());
+        existing.setIdEvento(evento);
+        existing.setIdTiposervico(tipo);
+
+        servicoService.save(existing);
+        return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Excluir serviço",
-            description = "Remove um serviço do sistema. Caso não exista, retorna 404")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteServico(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Servico existing = servicoService.findById(id);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
+        if (existing == null) return ResponseEntity.notFound().build();
+
         servicoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

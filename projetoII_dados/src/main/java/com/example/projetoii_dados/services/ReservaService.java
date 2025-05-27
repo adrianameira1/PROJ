@@ -9,25 +9,25 @@ import java.util.List;
 @Service
 public class ReservaService {
 
-    private final ReservaRepository reservaRepository;
+    private final ReservaRepository repository;
 
-    public ReservaService(ReservaRepository reservaRepository) {
-        this.reservaRepository = reservaRepository;
+    public ReservaService(ReservaRepository repository) {
+        this.repository = repository;
     }
 
     public List<Reserva> findAll() {
-        return reservaRepository.findAll();
+        return repository.findAll();
     }
 
-    public Reserva findById(Long id) {
-        return reservaRepository.findById(id).orElse(null);
+    public Reserva findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 
     public Reserva save(Reserva reserva) {
-        return reservaRepository.save(reserva);
+        return repository.save(reserva);
     }
 
-    public void deleteById(Long id) {
-        reservaRepository.deleteById(id);
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
     }
 }

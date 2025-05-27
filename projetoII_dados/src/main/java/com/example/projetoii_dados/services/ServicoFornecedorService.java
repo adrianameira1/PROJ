@@ -5,33 +5,30 @@ import com.example.core.models.ServicoFornecedorId;
 import com.example.core.repositories.ServicoFornecedorRepository;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
-
-
 
 @Service
 public class ServicoFornecedorService {
 
-    private final ServicoFornecedorRepository servicoFornecedorRepository;
+    private final ServicoFornecedorRepository repository;
 
-    public ServicoFornecedorService(ServicoFornecedorRepository servicoFornecedorRepository) {
-        this.servicoFornecedorRepository = servicoFornecedorRepository;
+    public ServicoFornecedorService(ServicoFornecedorRepository repository) {
+        this.repository = repository;
     }
 
     public List<ServicoFornecedor> findAll() {
-        return servicoFornecedorRepository.findAll();
+        return repository.findAll();
     }
 
     public ServicoFornecedor findById(ServicoFornecedorId id) {
-        return servicoFornecedorRepository.findById(id).orElse(null);
+        return repository.findById(id).orElse(null);
     }
 
-    public ServicoFornecedor save(ServicoFornecedor sf) {
-        return servicoFornecedorRepository.save(sf);
+    public ServicoFornecedor save(ServicoFornecedor entity) {
+        return repository.save(entity);
     }
 
     public void deleteById(ServicoFornecedorId id) {
-        servicoFornecedorRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }

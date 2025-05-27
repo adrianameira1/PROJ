@@ -39,7 +39,7 @@
 
 
             <Button text="Validar" onAction="#handleLogin"
-                    style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 10 40;"/>
+                    style="-fx-background-color: #3c716b; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 10 40;"/>
         </VBox>
     </center>
 

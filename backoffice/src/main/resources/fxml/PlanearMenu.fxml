@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.backoffice.Controllers.PlanearMenuController"
+            stylesheets="@/styles/estilo.css"
+            style="-fx-background-color: #F8F6E9;">
+
+    <top>
+        <VBox alignment="CENTER" spacing="5">
+            <padding><Insets top="10" bottom="5" left="10" right="10"/></padding>
+            <Label text="Planeamento do Evento" styleClass="label"/>
+            <HBox spacing="5" alignment="CENTER">
+                <Label text="ID Evento:"/>
+                <TextField fx:id="txtIdEvento" promptText="ex: 12" maxWidth="80"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" maxWidth="600"
+              style="-fx-border-color: #C9C9C9; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 20;">
+            <!-- Essa VBox tem o contorno aplicado -->
+
+            <!-- Decoração -->
+            <TitledPane text="Decoração" expanded="false">
+                <VBox spacing="5">
+                    <padding><Insets top="5" bottom="5" left="10" right="10"/></padding>
+                    <TextArea fx:id="txtDecoracao" promptText="Descreve o estilo de decoração..." prefRowCount="2"/>
+                </VBox>
+            </TitledPane>
+
+            <!-- Animação -->
+            <TitledPane text="Animação" expanded="false">
+                <VBox spacing="5">
+                    <padding><Insets top="5" bottom="5" left="10" right="10"/></padding>
+                    <CheckBox fx:id="checkAtracaoInfantil" text="Atração Infantil"/>
+                    <FlowPane hgap="10" vgap="5">
+                        <padding><Insets top="5" bottom="5" left="10" right="10"/></padding>
+                        <CheckBox fx:id="checkInsuflaveis" text="Insufláveis"/>
+                        <CheckBox fx:id="checkMascotes" text="Mascotes"/>
+                        <CheckBox fx:id="checkCircenses" text="Circenses"/>
+                        <CheckBox fx:id="checkPinturas" text="Pinturas"/>
+                        <CheckBox fx:id="checkBaloes" text="Balões"/>
+                    </FlowPane>
+                    <CheckBox fx:id="checkAtracaoMusical" text="Atração Musical"/>
+                    <FlowPane hgap="10" vgap="5">
+                        <padding><Insets top="5" bottom="5" left="10" right="10"/></padding>
+                        <CheckBox fx:id="checkDJ" text="DJ"/>
+                        <CheckBox fx:id="checkBandas" text="Bandas"/>
+                        <CheckBox fx:id="checkSolo" text="Artista Solo"/>
+                        <CheckBox fx:id="checkDancas" text="Danças"/>
+                    </FlowPane>
+                </VBox>
+            </TitledPane>
+
+            <!-- Catering -->
+            <TitledPane text="Catering" expanded="false">
+                <VBox spacing="5">
+                    <padding><Insets top="5" bottom="5" left="10" right="10"/></padding>
+                    <RadioButton fx:id="radioBuffet" text="Buffet"/>
+                    <RadioButton fx:id="radioMenuServido" text="Menu Servido"/>
+                    <RadioButton fx:id="radioCoquetel" text="Coquetel"/>
+                </VBox>
+            </TitledPane>
+
+            <!-- Equipamentos -->
+            <TitledPane text="Equipamentos" expanded="false">
+                <FlowPane hgap="15" vgap="5">
+                    <padding><Insets top="10" bottom="10" left="10" right="10"/></padding>
+                    <CheckBox fx:id="checkSom" text="Som"/>
+                    <CheckBox fx:id="checkLuz" text="Iluminação"/>
+                    <CheckBox fx:id="checkPalco" text="Palco"/>
+                </FlowPane>
+            </TitledPane>
+
+            <!-- Cronograma -->
+            <TitledPane text="Cronograma do Evento" expanded="false">
+                <VBox spacing="5">
+                    <padding><Insets top="5" bottom="5" left="10" right="10"/></padding>
+                    <TextArea fx:id="txtCronograma" promptText="Ex: horários e atividades..." prefRowCount="3"/>
+                </VBox>
+            </TitledPane>
+
+            <!-- Status -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Status:"/>
+                <ComboBox fx:id="comboStatus">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Planeado"/>
+                            <String fx:value="Confirmado"/>
+                            <String fx:value="Executado"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
+
+            <!-- Botões -->
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="botaoGuardar" text="Guardar Plano" onAction="#guardarPlano"/>
+                <Button fx:id="botaoCancelar" text="Voltar" onAction="#voltar"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

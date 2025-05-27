@@ -1,71 +1,71 @@
 package com.example.projetoii_dados.controllers;
 
+import com.example.core.models.Fornecedor;
+import com.example.core.models.Servico;
 import com.example.core.models.ServicoFornecedor;
 import com.example.core.models.ServicoFornecedorId;
+import com.example.core.repositories.FornecedorRepository;
+import com.example.core.repositories.ServicoRepository;
+import com.example.projetoii_dados.DTOs.ServicoFornecedorDTO;
 import com.example.projetoii_dados.services.ServicoFornecedorService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/servico-fornecedor")
-@Tag(name = "ServicoFornecedor", description = "Endpoints para manipular a associação de Servico e Fornecedor (N:N)")
+@RequestMapping("/api/servico-fornecedores")
+@Tag(name = "Serviço-Fornecedor", description = "Relacionamento entre serviços e fornecedores")
 public class ServicoFornecedorController {
 
-    private final ServicoFornecedorService servicoFornecedorService;
+    private final ServicoFornecedorService service;
+    private final ServicoRepository servicoRepository;
+    private final FornecedorRepository fornecedoreRepository;
 
-    public ServicoFornecedorController(ServicoFornecedorService servicoFornecedorService) {
-        this.servicoFornecedorService = servicoFornecedorService;
+    public ServicoFornecedorController(ServicoFornecedorService service,
+                                       ServicoRepository servicoRepository,
+                                       FornecedorRepository fornecedoreRepository) {
+        this.service = service;
+        this.servicoRepository = servicoRepository;
+        this.fornecedoreRepository = fornecedoreRepository;
     }
 
-    @Operation(summary = "Listar todas as associações Servico-Fornecedor",
-            description = "Retorna a lista de todas as relações entre serviços e fornecedores")
     @GetMapping
-    public List<ServicoFornecedor> getAll() {
-        return servicoFornecedorService.findAll();
+    public List<ServicoFornecedorDTO> getAll() {
+        return service.findAll().stream()
+                .map(sf -> new ServicoFornecedorDTO(
+                        sf.getId().getIdServico(),
+                        sf.getId().getIdFornecedor()
+                )).collect(Collectors.toList());
     }
 
-    @Operation(summary = "Buscar associação por ID composto",
-            description = "Retorna a associação especificada pelos IDs de fornecedor e serviço. Caso não exista, retorna 404")
-    @GetMapping("/fornecedor/{fornecedorId}/servico/{servicoId}")
-    public ResponseEntity<ServicoFornecedor> getById(
-            @PathVariable Integer fornecedorId,
-            @PathVariable Integer servicoId
-    ) {
-        ServicoFornecedorId sfId = new ServicoFornecedorId(fornecedorId, servicoId);
-        ServicoFornecedor sf = servicoFornecedorService.findById(sfId);
-        if (sf == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(sf);
-    }
-
-    @Operation(summary = "Criar nova associação Servico-Fornecedor",
-            description = "Cria uma nova relação entre um serviço e um fornecedor")
     @PostMapping
-    public ResponseEntity<ServicoFornecedor> create(@RequestBody ServicoFornecedor sf) {
-        // Aqui assumimos que o body já traga: id (com os IDs), ou o servico e fornecedor
-        // Necessário ter cuidado pois pode ser que você precise setar o ServicoFornecedorId manualmente
-        ServicoFornecedor novo = servicoFornecedorService.save(sf);
-        return ResponseEntity.ok(novo);
+    public ResponseEntity<Void> create(@RequestBody ServicoFornecedorDTO dto) {
+        Servico servico = servicoRepository.findById(dto.getIdServico().intValue()).orElse(null);
+        Fornecedor fornecedor = fornecedoreRepository.findById(dto.getIdFornecedor().intValue()).orElse(null);
+        if (servico == null || fornecedor == null) return ResponseEntity.badRequest().build();
+
+        ServicoFornecedor relacao = new ServicoFornecedor();
+        relacao.setId(new ServicoFornecedorId(
+                dto.getIdServico().intValue(),
+                dto.getIdFornecedor().intValue()
+        ));
+        relacao.setIdServico(servico);
+        relacao.setIdFornecedor(fornecedor);
+
+        service.save(relacao);
+        return ResponseEntity.status(201).build();
     }
 
-    @Operation(summary = "Excluir associação Servico-Fornecedor",
-            description = "Remove uma associação pelo ID composto. Caso não exista, retorna 404")
-    @DeleteMapping("/fornecedor/{fornecedorId}/servico/{servicoId}")
-    public ResponseEntity<Void> delete(
-            @PathVariable Integer fornecedorId,
-            @PathVariable Integer servicoId
-    ) {
-        ServicoFornecedorId sfId = new ServicoFornecedorId(fornecedorId, servicoId);
-        ServicoFornecedor existing = servicoFornecedorService.findById(sfId);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
-        servicoFornecedorService.deleteById(sfId);
+    @DeleteMapping("/{idServico}/{idFornecedor}")
+    public ResponseEntity<Void> delete(@PathVariable Integer idServico, @PathVariable Integer idFornecedor) {
+        ServicoFornecedorId id = new ServicoFornecedorId(idServico, idFornecedor);
+        ServicoFornecedor relacao = service.findById(id);
+        if (relacao == null) return ResponseEntity.notFound().build();
+
+        service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

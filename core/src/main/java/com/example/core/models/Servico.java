@@ -37,7 +37,7 @@ public class Servico {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "servicos")
-    private Set<Fornecedore> fornecedores = new LinkedHashSet<>();
+    private Set<Fornecedor> fornecedors = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -87,12 +87,12 @@ public class Servico {
         this.idTiposervico = idTiposervico;
     }
 
-    public Set<Fornecedore> getFornecedores() {
-        return fornecedores;
+    public Set<Fornecedor> getFornecedores() {
+        return fornecedors;
     }
 
-    public void setFornecedores(Set<Fornecedore> fornecedores) {
-        this.fornecedores = fornecedores;
+    public void setFornecedores(Set<Fornecedor> fornecedors) {
+        this.fornecedors = fornecedors;
     }
 
 }

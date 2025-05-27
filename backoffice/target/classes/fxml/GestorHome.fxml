@@ -1,9 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.backoffice.Controllers.GestorHomeController" alignment="CENTER" spacing="20"
-      style="-fx-background-color: #E6E4D8;">
-    <Label fx:id="welcomeLabel" style="-fx-font-size: 24px; -fx-text-fill: #3C716B;" />
-</VBox>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.backoffice.Controllers.GestorHomeController"
+            stylesheets="@/styles/estilo.css"
+            style="-fx-background-color: #E6E4D8;">
+
+    <!-- TOPO -->
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <padding><Insets top="40" bottom="10"/></padding>
+
+            <!-- LOGO MAIOR -->
+            <ImageView fitHeight="170" preserveRatio="true">
+                <image>
+                    <Image url="@/images/logo.png"/>
+                </image>
+            </ImageView>
+
+            <Label text="Bem-vindo(a), Responsável do Evento!" styleClass="title"/>
+        </VBox>
+    </top>
+
+    <!-- CENTRO -->
+    <center>
+        <GridPane hgap="40" vgap="30" alignment="CENTER">
+            <padding><Insets top="30" bottom="40"/></padding>
+
+            <!-- CARD 1 -->
+            <VBox alignment="CENTER" spacing="10"
+                  onMouseClicked="#abrirPlaneamentoEvento"
+                  style="-fx-background-color: #3C716B; -fx-background-radius: 20; -fx-padding: 15; -fx-cursor: hand;"
+                  GridPane.rowIndex="0" GridPane.columnIndex="0" prefWidth="150" prefHeight="150">
+                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/icon_reservas.svg"/>
+                    </image>
+                </ImageView>
+                <Label text="Planear Evento" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <!-- CARD 2 -->
+            <VBox alignment="CENTER" spacing="10"
+                  onMouseClicked="#abrirFornecedores"
+                  style="-fx-background-color: #3C716B; -fx-background-radius: 20; -fx-padding: 15; -fx-cursor: hand;"
+                  GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="150" prefHeight="150">
+                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
+                    <image>
+                        <Image url="/images/icon_pagamentos.svg"/>
+                    </image>
+                </ImageView>
+                <Label text="Fornecedores" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <!-- CARD 3 -->
+            <VBox alignment="CENTER" spacing="10"
+                  onMouseClicked="#abrirOrcamentos"
+                  style="-fx-background-color: #3C716B; -fx-background-radius: 20; -fx-padding: 15; -fx-cursor: hand;"
+                  GridPane.rowIndex="1" GridPane.columnIndex="0" prefWidth="150" prefHeight="150">
+                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
+                    <image>
+                        <Image url="/images/icon_faturas.svg"/>
+                    </image>
+                </ImageView>
+                <Label text="Orçamentos" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <!-- CARD 4 -->
+            <VBox alignment="CENTER" spacing="10"
+                  onMouseClicked="#abrirContatoClientes"
+                  style="-fx-background-color: #3C716B; -fx-background-radius: 20; -fx-padding: 15; -fx-cursor: hand;"
+                  GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="150" prefHeight="150">
+                <ImageView fitHeight="50" fitWidth="50" preserveRatio="true">
+                    <image>
+                        <Image url="/images/icon_contratos.svg"/>
+                    </image>
+                </ImageView>
+                <Label text="Cliente" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+            </VBox>
+        </GridPane>
+    </center>
+
+    <!-- RODAPÉ -->
+    <bottom>
+        <HBox alignment="CENTER">
+            <padding><Insets top="10" bottom="20"/></padding>
+            <Button text="Terminar Sessão"
+                    onAction="#terminarSessao"
+                    style="-fx-background-color: #3C716B; -fx-text-fill: white; -fx-background-radius: 30; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand;" />
+        </HBox>
+    </bottom>
+</BorderPane>

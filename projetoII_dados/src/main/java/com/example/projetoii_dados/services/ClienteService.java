@@ -17,21 +17,15 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public Cliente findById(Long id) {
+    public Cliente findById(Integer id) {
         return clienteRepository.findById(id).orElse(null);
     }
 
-    public Cliente save(Cliente clientee) {
-        Cliente cliente = new Cliente();
-        cliente.setNome(clientee.getNome());
-        cliente.setEmail(clientee.getEmail());
-        cliente.setTelefone(clientee.getTelefone());
+    public Cliente save(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         clienteRepository.deleteById(id);
     }
-
-    // Outras regras de negócio podem ir aqui.
 }

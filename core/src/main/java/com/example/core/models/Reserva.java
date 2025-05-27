@@ -14,7 +14,7 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reserva_id_gen")
     @SequenceGenerator(name = "reserva_id_gen", sequenceName = "reserva_id_reserva_seq", allocationSize = 1)
     @Column(name = "id_reserva", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
@@ -37,11 +37,11 @@ public class Reserva {
     @OneToMany(mappedBy = "idReserva")
     private Set<Evento> eventos = new LinkedHashSet<>();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -1,48 +1,37 @@
 package com.example.core.models;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "utilizador")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Utilizador {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "utilizador_id_gen")
-    @SequenceGenerator(name = "utilizador_id_gen", sequenceName = "utilizador_id_user_seq", allocationSize = 1)
-    @Column(name = "id_user", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "username", nullable = false, length = 50)
     private String username;
 
-    @Column(name = "password_hash", length = 100)
+    @Column(name = "password_hash")
     private String passwordHash;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cliente")
-    @JsonIgnore
-    private Cliente idCliente;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_funcionario")
-    @JsonIgnore
-    private Funcionariosfixo idFuncionario;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_tipouser", nullable = false)
-    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_tipouser")
     private Tipoutilizador idTipouser;
 
-    // Construtor vazio
-    public Utilizador() {}
+    @OneToOne
+    @JoinColumn(name = "id_funcionario")
+    private Funcionariosfixo idFuncionario;
 
-    // Getters e Setters
+    @OneToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente idCliente;
+
+    // ✅ GETTERS e SETTERS
+
     public Integer getId() {
         return id;
     }
@@ -75,12 +64,12 @@ public class Utilizador {
         this.passwordHash = passwordHash;
     }
 
-    public Cliente getIdCliente() {
-        return idCliente;
+    public Tipoutilizador getIdTipouser() {
+        return idTipouser;
     }
 
-    public void setIdCliente(Cliente idCliente) {
-        this.idCliente = idCliente;
+    public void setIdTipouser(Tipoutilizador idTipouser) {
+        this.idTipouser = idTipouser;
     }
 
     public Funcionariosfixo getIdFuncionario() {
@@ -91,11 +80,11 @@ public class Utilizador {
         this.idFuncionario = idFuncionario;
     }
 
-    public Tipoutilizador getIdTipouser() {
-        return idTipouser;
+    public Cliente getIdCliente() {
+        return idCliente;
     }
 
-    public void setIdTipouser(Tipoutilizador idTipouser) {
-        this.idTipouser = idTipouser;
+    public void setIdCliente(Cliente idCliente) {
+        this.idCliente = idCliente;
     }
 }

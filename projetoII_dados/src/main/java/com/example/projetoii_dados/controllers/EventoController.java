@@ -1,13 +1,18 @@
 package com.example.projetoii_dados.controllers;
 
 import com.example.core.models.Evento;
+import com.example.core.models.Reserva;
+import com.example.core.models.Tipoevento;
+import com.example.core.repositories.ReservaRepository;
+import com.example.core.repositories.TipoEventoRepository;
+import com.example.projetoii_dados.DTOs.EventoDTO;
 import com.example.projetoii_dados.services.EventoService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/eventos")
@@ -15,65 +20,91 @@ import java.util.List;
 public class EventoController {
 
     private final EventoService eventoService;
+    private final ReservaRepository reservaRepository;
+    private final TipoEventoRepository tipoeventoRepository;
 
-    public EventoController(EventoService eventoService) {
+    public EventoController(EventoService eventoService,
+                            ReservaRepository reservaRepository,
+                            TipoEventoRepository tipoEventoRepository) {
         this.eventoService = eventoService;
+        this.reservaRepository = reservaRepository;
+        this.tipoeventoRepository = tipoEventoRepository;
     }
 
-    @Operation(summary = "Listar todos os eventos",
-            description = "Retorna uma lista de todos os eventos cadastrados")
     @GetMapping
-    public List<Evento> getAllEventos() {
-        return eventoService.findAll();
+    public List<EventoDTO> getAllEventos() {
+        return eventoService.findAll().stream()
+                .map(e -> new EventoDTO(
+                        e.getOrcamento(),
+                        e.getCronograma(),
+                        e.getStatusevento(),
+                        e.getIdReserva().getId(),
+                        e.getIdTipoevento().getId()))
+                .collect(Collectors.toList());
     }
 
-    @Operation(summary = "Buscar evento por ID",
-            description = "Retorna um evento específico pelo seu ID. Caso não exista, retorna 404")
     @GetMapping("/{id}")
-    public ResponseEntity<Evento> getEventoById(@PathVariable Long id) {
+    public ResponseEntity<EventoDTO> getEventoById(@PathVariable Integer id) {
         Evento evento = eventoService.findById(id);
-        if (evento == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(evento);
+        if (evento == null) return ResponseEntity.notFound().build();
+
+        EventoDTO dto = new EventoDTO(
+                evento.getOrcamento(),
+                evento.getCronograma(),
+                evento.getStatusevento(),
+                evento.getIdReserva().getId(),
+                evento.getIdTipoevento().getId()
+        );
+        return ResponseEntity.ok(dto);
     }
 
-    @Operation(summary = "Criar novo evento",
-            description = "Cria um novo evento no sistema e retorna o evento criado")
     @PostMapping
-    public ResponseEntity<Evento> createEvento(@RequestBody Evento evento) {
-        Evento novo = eventoService.save(evento);
-        return ResponseEntity.ok(novo);
+    public ResponseEntity<Void> createEvento(@RequestBody EventoDTO dto) {
+        Reserva reserva = reservaRepository.findById(dto.getIdReserva()).orElse(null);
+        Tipoevento tipoevento = tipoeventoRepository.findById(dto.getIdTipoevento()).orElse(null);
+
+        if (reserva == null || tipoevento == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Evento evento = new Evento();
+        evento.setOrcamento(dto.getOrcamento());
+        evento.setCronograma(dto.getCronograma());
+        evento.setStatusevento(dto.getStatusevento());
+        evento.setIdReserva(reserva);
+        evento.setIdTipoevento(tipoevento);
+
+        eventoService.save(evento);
+        return ResponseEntity.status(201).build();
     }
 
-    @Operation(summary = "Atualizar evento",
-            description = "Atualiza os dados de um evento existente. Caso não exista, retorna 404")
     @PutMapping("/{id}")
-    public ResponseEntity<Evento> updateEvento(@PathVariable Long id, @RequestBody Evento eventoDetails) {
-        Evento existing = eventoService.findById(id);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> updateEvento(@PathVariable Integer id, @RequestBody EventoDTO dto) {
+        Evento evento = eventoService.findById(id);
+        if (evento == null) return ResponseEntity.notFound().build();
+
+        Reserva reserva = reservaRepository.findById(dto.getIdReserva()).orElse(null);
+        Tipoevento tipoevento = tipoeventoRepository.findById(dto.getIdTipoevento()).orElse(null);
+
+        if (reserva == null || tipoevento == null) {
+            return ResponseEntity.badRequest().build();
         }
 
-        // Exemplo de atualização de campos (ajuste conforme seu model):
-        existing.setOrcamento(eventoDetails.getOrcamento());
-        existing.setCronograma(eventoDetails.getCronograma());
-        existing.setStatusevento(eventoDetails.getStatusevento());
-        existing.setIdReserva(eventoDetails.getIdReserva());
-        existing.setIdTipoevento(eventoDetails.getIdTipoevento());
+        evento.setOrcamento(dto.getOrcamento());
+        evento.setCronograma(dto.getCronograma());
+        evento.setStatusevento(dto.getStatusevento());
+        evento.setIdReserva(reserva);
+        evento.setIdTipoevento(tipoevento);
 
-        Evento atualizado = eventoService.save(existing);
-        return ResponseEntity.ok(atualizado);
+        eventoService.save(evento);
+        return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Excluir evento",
-            description = "Remove um evento do sistema. Caso não exista, retorna 404")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvento(@PathVariable Long id) {
-        Evento existing = eventoService.findById(id);
-        if (existing == null) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deleteEvento(@PathVariable Integer id) {
+        Evento evento = eventoService.findById(id);
+        if (evento == null) return ResponseEntity.notFound().build();
+
         eventoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

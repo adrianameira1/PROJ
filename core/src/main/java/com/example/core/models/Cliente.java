@@ -2,9 +2,9 @@ package com.example.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
-import com.example.core.models.Utilizador;
 
 @Entity
 @Table(name = "cliente")
@@ -33,16 +33,14 @@ public class Cliente {
     @OneToMany(mappedBy = "idCliente")
     private Set<Utilizador> utilizadors = new LinkedHashSet<>();
 
-    // Construtor vazio (necessário para JPA e Swagger)
-    public Cliente() {}
+    public Cliente() {
+    }
 
     public Cliente(String nome, String email, String telefone) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
     }
-
-    // Getters e Setters
 
     public Integer getId() {
         return id;

@@ -7,11 +7,14 @@ public class Utilizador {
     private Integer id;
     private String nome;
     private String username;
-    private TipoUtilizador idTipouser;
+    private Integer idTipouser;
 
     public Integer getId() { return id; }
     public String getNome() { return nome; }
     public String getUsername() { return username; }
-    public TipoUtilizador getIdTipouser() { return idTipouser; }
-}
+    public Integer getIdTipouser() { return idTipouser; }
 
+    public void setIdTipouser(Integer idTipouser) {
+        this.idTipouser = idTipouser;
+    }
+}

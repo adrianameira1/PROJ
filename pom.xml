@@ -28,7 +28,7 @@
         <module>core</module>
         <module>projetoii_dados</module>    <!-- ajusta se o nome da pasta diferir -->
         <module>backoffice</module>
-        <module>frontend</module>
+        <module>frontend-mvc</module>
     </modules>
 
     <!-- nada mais é necessário: plugins e BOM vêm do parent Spring-Boot -->

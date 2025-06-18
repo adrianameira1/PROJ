@@ -1,16 +1,8 @@
 com\backoffice\Controllers\GestorHomeController.class
-com\backoffice\Controllers\ReservaRow.class
 com\backoffice\Controllers\ReservasMenuController.class
-com\backoffice\Controllers\ResponsavelQuintaHomeController.class
 com\backoffice\Service\ApiService.class
-com\backoffice\Controllers\ChefeSalaHomeController.class
-com\backoffice\Controllers\ReservaFormController.class
-com\backoffice\MainApp.class
 com\backoffice\model\Utilizador.class
 com\backoffice\Service\ApiService$1.class
-com\backoffice\Controllers\LoginController.class
 com\backoffice\Controllers\MainViewController.class
-com\backoffice\model\TipoUtilizador.class
 com\backoffice\model\ReservaRow.class
-com\backoffice\Service\ReservaService.class
 com\backoffice\Controllers\PlanearMenuController.class

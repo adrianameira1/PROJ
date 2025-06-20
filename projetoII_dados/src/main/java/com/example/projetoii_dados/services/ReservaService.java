@@ -30,4 +30,9 @@ public class ReservaService {
     public void deleteById(Integer id) {
         repository.deleteById(id);
     }
+
+    public List<Reserva> findByClienteId(Integer idCliente) {
+        return repository.findByIdCliente_Id(idCliente);
+    }
+
 }

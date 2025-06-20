@@ -30,4 +30,12 @@ public class EventoService {
     public void deleteById(Integer id) {
         eventoRepository.deleteById(id);
     }
+
+    public List<Evento> findByClienteId(Integer idCliente) {
+        return eventoRepository.findByIdReserva_IdCliente_Id(idCliente);
+    }
+    public Evento findByReservaId(Integer idReserva) {
+        return eventoRepository.findByIdReserva_Id(idReserva).orElse(null);
+    }
+
 }

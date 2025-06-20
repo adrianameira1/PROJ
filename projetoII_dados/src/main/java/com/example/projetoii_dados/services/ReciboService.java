@@ -9,6 +9,7 @@ import java.util.List;
 @Service
 public class ReciboService {
 
+
     private final ReciboRepository repository;
 
     public ReciboService(ReciboRepository repository) {
@@ -30,4 +31,9 @@ public class ReciboService {
     public void deleteById(Integer id) {
         repository.deleteById(id);
     }
+
+    public List<Recibo> findByClienteId(Integer idCliente) {
+        return repository.findByIdFatura_IdEvento_IdReserva_IdCliente_Id(idCliente);
+    }
+
 }

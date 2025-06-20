@@ -1,14 +1,18 @@
 package com.example.projetoii_dados.controllers;
 
 import com.example.core.models.Cliente;
+import com.example.core.models.Evento;
 import com.example.core.models.Reserva;
 import com.example.core.repositories.ClienteRepository;
+import com.example.core.repositories.ReservaRepository;
 import com.example.projetoii_dados.DTOs.ReservaDTO;
+import com.example.projetoii_dados.services.EventoService;
 import com.example.projetoii_dados.services.ReservaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,29 +23,40 @@ public class ReservaController {
 
     private final ReservaService reservaService;
     private final ClienteRepository clienteRepository;
+    private final ReservaRepository reservaRepository;
+    private final EventoService eventoService;
 
-    public ReservaController(ReservaService reservaService, ClienteRepository clienteRepository) {
+    public ReservaController(ReservaService reservaService,
+                             ClienteRepository clienteRepository,
+                             ReservaRepository reservaRepository,
+                             EventoService eventoService) {
         this.reservaService = reservaService;
         this.clienteRepository = clienteRepository;
+        this.reservaRepository = reservaRepository;
+        this.eventoService = eventoService;
     }
 
     @GetMapping
     public List<ReservaDTO> getAll() {
         return reservaService.findAll().stream()
                 .map(r -> new ReservaDTO(
+                        r.getId(),
                         r.getNome(),
                         r.getStatus(),
                         r.getData(),
                         r.getNumeroconvidados(),
                         r.getIdCliente().getId()
-                )).collect(Collectors.toList());
+                ))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ReservaDTO> getById(@PathVariable Integer id) {
         Reserva r = reservaService.findById(id);
         if (r == null) return ResponseEntity.notFound().build();
+
         return ResponseEntity.ok(new ReservaDTO(
+                r.getId(),
                 r.getNome(),
                 r.getStatus(),
                 r.getData(),
@@ -51,19 +66,34 @@ public class ReservaController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody ReservaDTO dto) {
+    public ResponseEntity<ReservaDTO> create(@RequestBody ReservaDTO dto) {
         Cliente cliente = clienteRepository.findById(dto.getIdCliente()).orElse(null);
-        if (cliente == null) return ResponseEntity.badRequest().build();
+        if (cliente == null || dto.getNumeroconvidados() > 350) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // ❗ Verificação extra: não permitir duas reservas na mesma data
+        if (reservaRepository.existsByData(dto.getData())) {
+            return ResponseEntity.status(409).build(); // 409 Conflict
+        }
 
         Reserva r = new Reserva();
         r.setNome(dto.getNome());
-        r.setStatus(dto.getStatus());
+        r.setStatus("Pré-Reserva");
         r.setData(dto.getData());
         r.setNumeroconvidados(dto.getNumeroconvidados());
         r.setIdCliente(cliente);
 
-        reservaService.save(r);
-        return ResponseEntity.status(201).build();
+        Reserva nova = reservaService.save(r);
+
+        return ResponseEntity.status(201).body(new ReservaDTO(
+                nova.getId(),
+                nova.getNome(),
+                nova.getStatus(),
+                nova.getData(),
+                nova.getNumeroconvidados(),
+                nova.getIdCliente().getId()
+        ));
     }
 
     @PutMapping("/{id}")
@@ -71,15 +101,17 @@ public class ReservaController {
         Reserva existing = reservaService.findById(id);
         if (existing == null) return ResponseEntity.notFound().build();
 
-        Cliente cliente = clienteRepository.findById(dto.getIdCliente()).orElse(null);
-        if (cliente == null) return ResponseEntity.badRequest().build();
+        // ⚠️ Impede edição se o evento associado estiver confirmado
+        Evento evento = eventoService.findByReservaId(id);
+        if (evento != null && "Confirmado".equalsIgnoreCase(evento.getStatusevento())) {
+            return ResponseEntity.status(403).build(); // 403 Forbidden
+        }
 
-        existing.setNome(dto.getNome());
-        existing.setStatus(dto.getStatus());
-        existing.setData(dto.getData());
+        if (dto.getNumeroconvidados() == null || dto.getNumeroconvidados() > 350) {
+            return ResponseEntity.badRequest().build();
+        }
+
         existing.setNumeroconvidados(dto.getNumeroconvidados());
-        existing.setIdCliente(cliente);
-
         reservaService.save(existing);
         return ResponseEntity.ok().build();
     }
@@ -89,7 +121,33 @@ public class ReservaController {
         Reserva existing = reservaService.findById(id);
         if (existing == null) return ResponseEntity.notFound().build();
 
+        // Se houver evento Planeado para esta reserva, apaga-o primeiro
+        Evento evento = eventoService.findByReservaId(id);
+        if (evento != null && "Planeado".equalsIgnoreCase(evento.getStatusevento())) {
+            eventoService.deleteById(evento.getId());
+        }
+
         reservaService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/cliente/{id}")
+    public List<ReservaDTO> getByClienteId(@PathVariable Integer id) {
+        return reservaService.findByClienteId(id).stream()
+                .map(r -> new ReservaDTO(
+                        r.getId(),
+                        r.getNome(),
+                        r.getStatus(),
+                        r.getData(),
+                        r.getNumeroconvidados(),
+                        r.getIdCliente().getId()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/existe-data")
+    public ResponseEntity<Boolean> existeReservaNaData(@RequestParam LocalDate data) {
+        boolean existe = reservaRepository.existsByData(data);
+        return ResponseEntity.ok(existe);
     }
 }

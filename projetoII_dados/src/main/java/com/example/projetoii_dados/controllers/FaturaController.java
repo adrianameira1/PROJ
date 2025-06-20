@@ -7,6 +7,7 @@ import com.example.core.repositories.EventoRepository;
 import com.example.core.repositories.TipofaturaRepository;
 import com.example.projetoii_dados.DTOs.FaturaDTO;
 import com.example.projetoii_dados.services.FaturaService;
+import com.example.projetoii_dados.services.EventoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +23,16 @@ public class FaturaController {
     private final FaturaService faturaService;
     private final EventoRepository eventoRepository;
     private final TipofaturaRepository tipofaturaRepository;
+    private final EventoService eventoService; // ✅ Correção: injeção do serviço
 
     public FaturaController(FaturaService faturaService,
                             EventoRepository eventoRepository,
-                            TipofaturaRepository tipofaturaRepository) {
+                            TipofaturaRepository tipofaturaRepository,
+                            EventoService eventoService) {
         this.faturaService = faturaService;
         this.eventoRepository = eventoRepository;
         this.tipofaturaRepository = tipofaturaRepository;
+        this.eventoService = eventoService; // ✅
     }
 
     @GetMapping
@@ -102,5 +106,25 @@ public class FaturaController {
         if (fatura == null) return ResponseEntity.notFound().build();
         faturaService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/cliente/{idCliente}")
+    public List<Fatura> getByCliente(@PathVariable Integer idCliente) {
+        return faturaService.findByClienteId(idCliente);
+    }
+
+    // ✅ Novo endpoint: confirmar evento ao pagar
+    @PutMapping("/confirmar/{idEvento}")
+    public ResponseEntity<Void> confirmarEventoAoPagar(@PathVariable Integer idEvento) {
+        Evento evento = eventoService.findById(idEvento);
+        if (evento == null) return ResponseEntity.notFound().build();
+
+        if (!"Planeado".equalsIgnoreCase(evento.getStatusevento())) {
+            return ResponseEntity.badRequest().build(); // Só planeados podem ser confirmados
+        }
+
+        evento.setStatusevento("Confirmado");
+        eventoService.save(evento);
+        return ResponseEntity.ok().build();
     }
 }

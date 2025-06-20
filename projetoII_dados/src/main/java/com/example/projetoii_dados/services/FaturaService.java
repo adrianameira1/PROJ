@@ -30,4 +30,9 @@ public class FaturaService {
     public void deleteById(Integer id) {
         faturaRepository.deleteById(id);
     }
+
+    public List<Fatura> findByClienteId(Integer idCliente) {
+        return faturaRepository.findByIdEvento_IdReserva_IdCliente_Id(idCliente);
+    }
+
 }

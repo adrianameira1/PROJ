@@ -1,5 +1,6 @@
 package com.example.projetoii_dados.controllers;
 
+import com.example.core.models.Cliente;
 import com.example.core.models.Funcionariosfixo;
 import com.example.core.models.Funcaofuncionario;
 import com.example.core.models.Tipoutilizador;
@@ -9,9 +10,12 @@ import com.example.core.repositories.FuncaoFuncionarioRepository;
 import com.example.core.repositories.TipoUtilizadorRepository;
 import com.example.projetoii_dados.DTOs.NovoUtilizadorDTO;
 import com.example.projetoii_dados.DTOs.UtilizadorDTO;
+import com.example.projetoii_dados.services.ClienteService;
 import com.example.projetoii_dados.services.UtilizadorService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,17 +28,20 @@ import java.util.stream.Collectors;
 public class UtilizadorController {
 
     private final UtilizadorService utilizadorService;
+    private final ClienteService clienteService;
     private final FuncionariosFixosRepository funcionariosfixoRepository;
     private final TipoUtilizadorRepository tipoUtilizadorRepository;
     private final FuncaoFuncionarioRepository funcaoFuncionarioRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UtilizadorController(UtilizadorService utilizadorService,
+                                ClienteService clienteService,
                                 FuncionariosFixosRepository funcionariosfixoRepository,
                                 TipoUtilizadorRepository tipoUtilizadorRepository,
                                 FuncaoFuncionarioRepository funcaoFuncionarioRepository,
                                 PasswordEncoder passwordEncoder) {
         this.utilizadorService = utilizadorService;
+        this.clienteService = clienteService;
         this.funcionariosfixoRepository = funcionariosfixoRepository;
         this.tipoUtilizadorRepository = tipoUtilizadorRepository;
         this.funcaoFuncionarioRepository = funcaoFuncionarioRepository;
@@ -43,28 +50,49 @@ public class UtilizadorController {
 
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody NovoUtilizadorDTO dto) {
-        Tipoutilizador tipo = tipoUtilizadorRepository.findById(dto.idTipouser).orElse(null);
+        Tipoutilizador tipo = tipoUtilizadorRepository.findById(1).orElse(null);
         if (tipo == null) return ResponseEntity.badRequest().build();
 
         Funcaofuncionario funcao = funcaoFuncionarioRepository.findById(1).orElse(null); // ID 1 = "A definir"
         if (funcao == null) return ResponseEntity.badRequest().build();
 
         Funcionariosfixo funcionario = new Funcionariosfixo();
-        funcionario.setNome(dto.nome);
-        funcionario.setContacto(dto.contacto); // usar contacto real
+        funcionario.setNome(dto.getNome());
+        funcionario.setContacto(dto.getTelefone());
         funcionario.setFuncao(funcao);
         funcionario = funcionariosfixoRepository.save(funcionario);
 
         Utilizador u = new Utilizador();
-        u.setNome(dto.nome);
-        u.setUsername(dto.username);
-        u.setPasswordHash(passwordEncoder.encode(dto.password));
+        u.setNome(dto.getNome());
+        u.setUsername(dto.getUsername());
+        u.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         u.setIdFuncionario(funcionario);
         u.setIdTipouser(tipo);
         u.setIdCliente(null);
 
         utilizadorService.save(u);
         return ResponseEntity.status(201).build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerClienteUtilizador(@RequestBody NovoUtilizadorDTO dto) {
+        if (utilizadorService.existsByUsername(dto.getUsername())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username já existe");
+        }
+
+        Cliente cliente = new Cliente(dto.getNome(), dto.getEmail(), dto.getTelefone());
+        clienteService.save(cliente);
+
+        Utilizador utilizador = new Utilizador();
+        utilizador.setNome(dto.getNome());
+        utilizador.setUsername(dto.getUsername());
+        utilizador.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
+        utilizador.setIdCliente(cliente);
+        utilizador.setIdTipouser(tipoUtilizadorRepository.findById(1).orElse(null)); // Tipo "CLIENTE"
+
+        utilizadorService.save(utilizador);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registo efetuado com sucesso");
     }
 
     @GetMapping

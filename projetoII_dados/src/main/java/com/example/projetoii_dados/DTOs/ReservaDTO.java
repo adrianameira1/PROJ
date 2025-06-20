@@ -3,6 +3,7 @@ package com.example.projetoii_dados.DTOs;
 import java.time.LocalDate;
 
 public class ReservaDTO {
+    private Integer id;
     private String nome;
     private String status;
     private LocalDate data;
@@ -11,13 +12,22 @@ public class ReservaDTO {
 
     public ReservaDTO() {}
 
-    public ReservaDTO(String nome, String status, LocalDate data, Integer numeroconvidados, Integer idCliente) {
+    public ReservaDTO(Integer id, String nome, String status, LocalDate data, Integer numeroconvidados, Integer idCliente) {
+        this.id = id;
         this.nome = nome;
         this.status = status;
         this.data = data;
         this.numeroconvidados = numeroconvidados;
         this.idCliente = idCliente;
     }
+
+    // também mantém o construtor sem id se necessário
+    public ReservaDTO(String nome, String status, LocalDate data, Integer numeroconvidados, Integer idCliente) {
+        this(null, nome, status, data, numeroconvidados, idCliente);
+    }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }

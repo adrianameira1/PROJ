@@ -30,4 +30,12 @@ public class UtilizadorService {
     public void deleteById(Integer id) {
         repository.deleteById(id);
     }
+
+    public boolean existsByUsername(String username) {
+        return repository.existsByUsername(username);
+    }
+    public Utilizador findByUsername(String username) {
+        return repository.findByUsername(username).orElse(null);
+    }
+
 }

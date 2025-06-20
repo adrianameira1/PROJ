@@ -24,7 +24,7 @@ public class TipoServicoController {
     @GetMapping
     public List<TipoServicoDTO> getAll() {
         return service.findAll().stream()
-                .map(t -> new TipoServicoDTO(t.getDesignacao()))
+                .map(t -> new TipoServicoDTO(t.getId(), t.getDesignacao()))
                 .collect(Collectors.toList());
     }
 
@@ -32,7 +32,8 @@ public class TipoServicoController {
     public ResponseEntity<TipoServicoDTO> getById(@PathVariable Integer id) {
         Tiposervico t = service.findById(id);
         if (t == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(new TipoServicoDTO(t.getDesignacao()));
+        return ResponseEntity.ok(new TipoServicoDTO(t.getId(), t.getDesignacao()));
+
     }
 
     @PostMapping

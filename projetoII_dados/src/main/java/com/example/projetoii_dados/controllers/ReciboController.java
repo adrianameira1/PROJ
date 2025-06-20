@@ -120,4 +120,9 @@ public class ReciboController {
         reciboService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/cliente/{idCliente}")
+    public List<Recibo> getByCliente(@PathVariable Integer idCliente) {
+        return reciboService.findByClienteId(idCliente);
+    }
+
 }

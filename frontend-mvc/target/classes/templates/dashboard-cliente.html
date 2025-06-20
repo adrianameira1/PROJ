@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Cliente - Quinta Eventos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.1) 0%, rgba(74, 124, 89, 0.1) 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo-nav {
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-nav:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 0.7rem 1.5rem;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-logout {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem; /* <-- adicionado */
+            margin-bottom: 2rem;
+        }
+
+
+        .user-info {
+            color: #2d5016;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        /* Main Dashboard */
+        .dashboard-main {
+            padding: 6rem 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #2d5016, #4a7c59);
+        }
+
+        .welcome-title {
+            color: #2d5016;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            color: #4a7c59;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .dashboard-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .dashboard-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #2d5016, #4a7c59);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(45, 80, 22, 0.1);
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.75rem;
+            color: #2d5016;
+        }
+
+        .section-title {
+            color: #2d5016;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(45deg, #2d5016, #4a7c59);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(45, 80, 22, 0.1);
+            color: #2d5016;
+            padding: 0.6rem 1rem;
+            border: 2px solid #2d5016;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: #2d5016;
+            color: white;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d5016;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #4a7c59;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Action Grid */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .action-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            border-color: #4a7c59;
+            box-shadow: 0 15px 40px rgba(45, 80, 22, 0.2);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            color: #2d5016;
+        }
+
+        .action-title {
+            color: #2d5016;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-description {
+            color: #4a7c59;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(45, 80, 22, 0.1);
+        }
+
+        .modal-title {
+            color: #2d5016;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #2d5016;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2d5016;
+            font-size: 0.95rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: rgba(248, 249, 250, 0.8);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #4a7c59;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th {
+            background: linear-gradient(45deg, #2d5016, #4a7c59);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table tr:hover {
+            background: rgba(45, 80, 22, 0.05);
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message.success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #155724;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #721c24;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .dashboard-main {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/">
+            <img src="/images/logo.png" alt="Quinta Eventos" class="logo-nav">
+        </a>
+        <div class="nav-links">
+            <div class="user-info">Bem-vindo, <span id="userName">Cliente</span></div>
+            <a href="/logout" class="nav-btn btn-logout">Sair</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Dashboard -->
+<main class="dashboard-main">
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <h1 class="welcome-title">Dashboard do Cliente</h1>
+        <p class="welcome-subtitle">Gerencie as suas reservas, eventos e consulte o histórico das suas atividades</p>
+    </section>
+
+    <!-- Quick Stats -->
+    <div class="quick-stats">
+        <div class="stat-card">
+            <div class="stat-number" id="totalReservas">0</div>
+            <div class="stat-label">Reservas Ativas</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalEventos">0</div>
+            <div class="stat-label">Eventos Planeados</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalFaturas">0</div>
+            <div class="stat-label">Faturas Pendentes</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalGasto">€0</div>
+            <div class="stat-label">Total Investido</div>
+        </div>
+    </div>
+
+    <!-- Actions Grid -->
+    <div class="actions-grid">
+        <div class="action-card" onclick="openModal('novaReservaModal')">
+            <div class="action-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="#2d5016" stroke-width="1.5" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+            </div>
+            <div class="action-title">Nova Reserva</div>
+            <div class="action-description">Criar uma nova reserva para o seu próximo evento</div>
+        </div>
+
+        <div class="action-card" onclick="openModal('consultarDadosModal')">
+            <div class="action-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="#2d5016" stroke-width="1.5" viewBox="0 0 24 24">
+                    <line x1="4" y1="20" x2="20" y2="20" />
+                    <rect x="4" y="14" width="4" height="6" />
+                    <rect x="10" y="10" width="4" height="10" />
+                    <rect x="16" y="6" width="4" height="14" />
+                </svg>
+            </div>
+            <div class="action-title">Consultar Dados</div>
+            <div class="action-description">Ver reservas, eventos e faturas</div>
+        </div>
+    </div>
+
+
+    <!-- Dashboard Sections Grid -->
+    <div class="dashboard-grid">
+        <!-- Reservas Recentes -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <div class="section-icon">...</div>
+                <h3 class="section-title">Reservas Recentes</h3>
+            </div>
+            <div id="reservasRecentes"></div> <!-- ✅ Aqui é onde o JS insere o conteúdo -->
+            <button class="btn-secondary" onclick="atualizarReservasRecentes()">Atualizar</button>
+        </section>
+
+
+        <!-- Eventos Próximos -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <div class="section-icon">...</div>
+                <h3 class="section-title">Próximos Eventos</h3>
+            </div>
+            <div id="eventosProximos"></div>
+            <button class="btn-secondary" onclick="atualizarEventosProximos()">Atualizar</button>
+        </section>
+
+    </div>
+</main>
+
+<!-- Modal Nova Reserva -->
+<div id="novaReservaModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Nova Reserva</h2>
+            <span class="close" onclick="closeModal('novaReservaModal')">&times;</span>
+        </div>
+        <form id="novaReservaForm">
+            <div class="form-group">
+                <label for="nomeReserva">Nome da Reserva</label>
+                <input type="text" id="nomeReserva" class="form-input" placeholder="Ex: Casamento Silva" required>
+            </div>
+            <div class="form-group">
+                <label for="dataReserva">Data do Evento</label>
+                <input type="date" id="dataReserva" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="numConvidados">Número de Convidados</label>
+                <input type="number" id="numConvidados" class="form-input" min="1" max="350" placeholder="Ex: 150" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%;">
+                Criar Reserva
+            </button>
+        </form>
+        <div id="reservaMessage" class="message"></div>
+
+        <!-- Seção para definir evento (aparece após criar reserva) -->
+        <div id="eventoSection" style="display: none; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid rgba(45, 80, 22, 0.1);">
+            <h3 style="color: #2d5016; margin-bottom: 1rem;">Definir Necessidades do Evento</h3>
+            <form id="eventoForm">
+                <div class="form-group">
+                    <label for="tipoEvento">Tipo de Evento</label>
+                    <select id="tipoEvento" class="form-select" required>
+                        <option value="">Selecione o tipo de evento</option>
+                        <option value="1">Casamento</option>
+                        <option value="2">Aniversário</option>
+                        <option value="3">Corporativo</option>
+                        <option value="4">Batizado</option>
+                        <option value="5">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cronograma">Cronograma / Observações</label>
+                    <textarea id="cronograma" class="form-textarea" placeholder="Descreva o cronograma desejado, horários especiais, preferências..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Serviços Extra</label>
+                    <div id="listaServicos"></div>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                    Definir Evento
+                </button>
+            </form>
+            <div id="eventoMessage" class="message"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Consultar Dados -->
+<div id="consultarDadosModal" class="modal">
+    <div class="modal-content" style="max-width: 900px;">
+        <div class="modal-header">
+            <h2 class="modal-title">Consultar Dados</h2>
+            <span class="close" onclick="closeModal('consultarDadosModal')">&times;</span>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <button class="btn-secondary" onclick="mostrarTabela('reservas')"> Reservas</button>
+            <button class="btn-secondary" onclick="mostrarTabela('eventos')" style="margin-right: 0.5rem;"> Eventos</button>
+            <button class="btn-secondary" onclick="mostrarTabela('faturas')" style="margin-right: 0.5rem;"> Faturas</button>
+        </div>
+
+        <div id="tabelaContainer">
+            <p style="text-align: center; color: #6c757d; padding: 2rem;">
+                Selecione uma categoria acima para visualizar os dados
+            </p>
+        </div>
+    </div>
+</div>
+<div id="editarReservaModal" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h2 class="modal-title">Editar Reserva</h2>
+            <span class="close" onclick="closeModal('editarReservaModal')">&times;</span>
+        </div>
+        <form id="editarReservaForm">
+            <input type="hidden" id="editReservaId">
+            <div class="form-group">
+                <label for="editNomeReserva">Nome</label>
+                <input type="text" id="editNomeReserva" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="editDataReserva">Data</label>
+                <input type="date" id="editDataReserva" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="editNumConvidados">Número de Convidados</label>
+                <input type="number" id="editNumConvidados" class="form-input" min="1" max="350" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%;">Guardar</button>
+        </form>
+        <div id="editReservaMsg" class="message"></div>
+    </div>
+</div>
+
+
+<div id="editarEventoModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2 class="modal-title">Editar Evento</h2>
+            <span class="close" onclick="closeModal('editarEventoModal')">&times;</span>
+        </div>
+        <form id="editarEventoForm">
+            <input type="hidden" id="editEventoId">
+            <div class="form-group">
+                <label for="editCronograma">Cronograma / Observações</label>
+                <textarea id="editCronograma" class="form-textarea" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Serviços Associados</label>
+                <div id="editServicosCheckboxes"></div>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%;">Guardar Alterações</button>
+        </form>
+        <div id="editEventoMsg" class="message"></div>
+    </div>
+</div>
+<!-- Modal de Confirmação -->
+<div id="confirmarModal" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h2 class="modal-title">Confirmar Ação</h2>
+            <span class="close" onclick="fecharConfirmarModal()">&times;</span>
+        </div>
+        <p id="confirmarMensagem" style="margin-bottom: 2rem; color: #2d5016;"></p>
+        <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+            <button class="btn-secondary" onclick="fecharConfirmarModal()">Cancelar</button>
+            <button class="btn-primary" id="confirmarSimBtn">Sim</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    let ultimaReservaId = null;
+    let dadosCliente = {
+        reservas: [],
+        eventos: [],
+        faturas: [],
+        recibos: []
+    };
+
+
+    async function carregarDadosIniciais(userId) {
+        await Promise.all([
+            carregarReservas(userId),
+            carregarEventos(userId),
+            carregarFaturas(userId)
+        ]);
+        await carregarEstatisticas(userId);
+    }
+
+
+    async function carregarReservas(userId) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/reservas/cliente/${userId}`);
+            if (response.ok) {
+                dadosCliente.reservas = await response.json();
+                atualizarReservasRecentes();
+            }
+        } catch (error) {
+            console.error("Erro ao carregar reservas:", error);
+        }
+    }
+
+    async function carregarEventos(userId) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/eventos/cliente/${userId}`);
+            if (response.ok) {
+                dadosCliente.eventos = await response.json();
+                atualizarEventosProximos();
+            }
+        } catch (error) {
+            console.error("Erro ao carregar eventos:", error);
+        }
+    }
+
+    function atualizarReservasRecentes() {
+        const container = document.getElementById('reservasRecentes');
+        if (!container) return;
+
+        if (dadosCliente.reservas.length === 0) {
+            container.innerHTML = '<p style="color: #6c757d; text-align: center; padding: 2rem;">Nenhuma reserva encontrada</p>';
+            return;
+        }
+
+        const reservasRecentes = dadosCliente.reservas.slice(-3).reverse();
+        container.innerHTML = reservasRecentes.map(reserva => `
+        <div style="background: rgba(45, 80, 22, 0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+            <h4 style="color: #2d5016; margin-bottom: 0.5rem;">${reserva.nome}</h4>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Data: ${new Date(reserva.data).toLocaleDateString('pt-PT')}</p>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Convidados: ${reserva.numeroconvidados}</p>
+        </div>
+    `).join('');
+    }
+
+    function atualizarEventosProximos() {
+        const container = document.getElementById('eventosProximos');
+        if (!container) return;
+
+        if (dadosCliente.eventos.length === 0) {
+            container.innerHTML = '<p style="color: #6c757d; text-align: center; padding: 2rem;">Nenhum evento encontrado</p>';
+            return;
+        }
+
+        const eventosProximos = dadosCliente.eventos.slice(-3).reverse();
+        container.innerHTML = eventosProximos.map(evento => `
+        <div style="background: rgba(45, 80, 22, 0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+            <h4 style="color: #2d5016; margin-bottom: 0.5rem;">Evento #${evento.id}</h4>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Orçamento: €${evento.orcamento}</p>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Status: ${evento.statusevento}</p>
+        </div>
+    `).join('');
+    }
+
+    function showMessage(id, mensagem, tipo) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = mensagem;
+        el.className = `message ${tipo} show`;
+        setTimeout(() => el.classList.remove('show'), 5000);
+    }
+    function mostrarConfirmacao(mensagem, callback) {
+        const modal = document.getElementById("confirmarModal");
+        const msg = document.getElementById("confirmarMensagem");
+        const simBtn = document.getElementById("confirmarSimBtn");
+
+        msg.textContent = mensagem;
+        modal.style.display = "block";
+
+        // Remove event listeners antigos para evitar múltiplas execuções
+        const novoBtn = simBtn.cloneNode(true);
+        simBtn.parentNode.replaceChild(novoBtn, simBtn);
+
+        novoBtn.addEventListener("click", async () => {
+            modal.style.display = "none";
+            await callback();
+        });
+    }
+
+    function fecharConfirmarModal() {
+        document.getElementById("confirmarModal").style.display = "none";
+    }
+
+
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+        document.querySelectorAll(`#${modalId} form`).forEach(form => form.reset());
+        const eventoSection = document.getElementById('eventoSection');
+        if (eventoSection) eventoSection.style.display = 'none';
+    }
+
+    document.getElementById('novaReservaForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const userId = sessionStorage.getItem("clienteId");
+        if (!userId) return alert("Cliente não autenticado.");
+
+        const nome = document.getElementById('nomeReserva').value;
+        const data = document.getElementById('dataReserva').value;
+        const convidados = parseInt(document.getElementById('numConvidados').value);
+
+        if (convidados > 350) {
+            showMessage('reservaMessage', 'O número máximo de convidados é 350.', 'error');
+            return;
+        }
+
+        // Validação da data: já existe reserva nesta data?
+        try {
+            const checkData = await fetch(`http://localhost:8080/api/reservas/existe-data?data=${data}`);
+            const existe = await checkData.json();
+            if (existe) {
+                showMessage('reservaMessage', 'Já existe uma reserva nessa data. Escolha outra.', 'error');
+                return;
+            }
+        } catch (err) {
+            console.error("Erro ao verificar disponibilidade da data", err);
+            showMessage('reservaMessage', 'Erro ao verificar a data. Tente novamente.', 'error');
+            return;
+        }
+
+        const formData = {
+            nome,
+            data,
+            numeroconvidados: convidados,
+            idCliente: parseInt(userId)
+        };
+
+        try {
+            const response = await fetch("http://localhost:8080/api/reservas", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.status === 409) {
+                showMessage('reservaMessage', 'Já existe uma reserva nessa data.', 'error');
+                return;
+            }
+
+            if (response.ok) {
+                const created = await response.json();
+                ultimaReservaId = created.id || null;
+
+                showMessage('reservaMessage', 'Reserva criada com sucesso!', 'success');
+                document.getElementById('eventoSection').style.display = 'block';
+                await carregarTiposServicos();
+                await carregarReservas(userId);
+            } else {
+                showMessage('reservaMessage', 'Erro ao criar reserva.', 'error');
+            }
+        } catch (error) {
+            console.error("Erro ao criar reserva:", error);
+            showMessage('reservaMessage', 'Erro inesperado.', 'error');
+        }
+    });
+
+
+    document.getElementById('eventoForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const tipoEventoId = parseInt(document.getElementById('tipoEvento').value);
+        const cronograma = document.getElementById('cronograma').value;
+        const reservaId = ultimaReservaId;
+
+        if (!reservaId) {
+            showMessage('eventoMessage', 'Erro interno: reserva não encontrada.', 'error');
+            return;
+        }
+
+        try {
+            const eventoResponse = await fetch("http://localhost:8080/api/eventos", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    orcamento: 0,
+                    cronograma,
+                    statusevento: "Planeado",
+                    idReserva: reservaId,
+                    idTipoevento: tipoEventoId
+                })
+            });
+
+            if (!eventoResponse.ok) throw new Error();
+
+            const eventos = await fetch(`http://localhost:8080/api/eventos/cliente/${sessionStorage.getItem("clienteId")}`);
+            const listaEventos = await eventos.json();
+            const eventoId = listaEventos[listaEventos.length - 1]?.id;
+
+            if (!eventoId) throw new Error("Evento não encontrado.");
+
+            const checkboxes = document.querySelectorAll(".servico-checkbox:checked");
+            let total = 0;
+            for (let checkbox of checkboxes) {
+                const nome = checkbox.dataset.nome.toLowerCase();
+                const custo = nome === "catering" ? parseInt(document.getElementById("numConvidados").value) * 60 : 300;
+                total += custo;
+
+                await fetch("http://localhost:8080/api/servicos", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        statuspagamento: "Pendente",
+                        detalhesservico: `Solicitado: ${checkbox.dataset.nome}`,
+                        custototal: custo,
+                        idEvento: eventoId,
+                        idTiposervico: parseInt(checkbox.dataset.id)
+                    })
+                });
+            }
+
+            await fetch(`http://localhost:8080/api/eventos/${eventoId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    orcamento: total,
+                    cronograma,
+                    statusevento: "Planeado",
+                    idReserva: reservaId,
+                    idTipoevento: tipoEventoId
+                })
+            });
+
+            const userId = sessionStorage.getItem("clienteId");
+
+            showMessage("eventoMessage", "Evento e serviços guardados com sucesso!", "success");
+
+// FECHAR MODAL
+            document.getElementById("novaReservaModal").style.display = "none";
+
+// ATUALIZAR DASHBOARD
+            await carregarReservas(userId);
+            await carregarEventos(userId);
+            await carregarEstatisticas(userId);
+
+
+        } catch (error) {
+            console.error("Erro ao criar evento:", error);
+            showMessage("eventoMessage", "Erro inesperado ao criar evento.", "error");
+        }
+    });
+
+    async function carregarTiposServicos() {
+        try {
+            const response = await fetch("http://localhost:8080/api/tiposervicos");
+            const tipos = await response.json();
+
+            const container = document.getElementById("listaServicos");
+            container.innerHTML = "";
+
+            tipos.forEach(servico => {
+                const item = document.createElement("div");
+                item.innerHTML = `
+                <label>
+                    <input type="checkbox" class="servico-checkbox" data-id="${servico.id}" data-nome="${servico.designacao}">
+                    ${servico.designacao}
+                </label>`;
+                container.appendChild(item);
+            });
+        } catch (err) {
+            console.error("Erro ao carregar tipos de serviço:", err);
+        }
+    }
+
+    async function carregarNomeCliente(userId) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/clientes/${userId}`);
+            if (!response.ok) throw new Error("Erro ao carregar cliente");
+
+            const cliente = await response.json();
+            console.log("Cliente carregado:", cliente);
+
+            if (cliente?.nome) {
+                document.getElementById("userName").textContent = cliente.nome;
+                // Guarda no sessionStorage para uso futuro
+                sessionStorage.setItem("clienteNome", cliente.nome);
+            } else {
+                document.getElementById("userName").textContent = "Cliente";
+            }
+
+        } catch (err) {
+            console.error("Erro ao buscar nome do cliente:", err);
+            document.getElementById("userName").textContent = "Cliente";
+        }
+    }
+    async function carregarEstatisticas(userId) {
+        // 1. Contar reservas em "Pré-Reserva"
+        const reservasAtivas = dadosCliente.reservas.filter(r => r.status === "Pré-Reserva");
+        document.getElementById("totalReservas").textContent = reservasAtivas.length;
+
+        // 2. Contar eventos com status "Planeado"
+        const eventosPlaneados = dadosCliente.eventos.filter(e => e.statusevento === "Planeado");
+        document.getElementById("totalEventos").textContent = eventosPlaneados.length;
+
+        // 3. Faturas Pendentes = eventos confirmados
+        const eventosConfirmados = dadosCliente.eventos.filter(e => e.statusevento === "Confirmado");
+        document.getElementById("totalFaturas").textContent = eventosConfirmados.length;
+
+        // 4. Total Investido = soma dos orçamentos dos eventos confirmados
+        const totalInvestido = eventosConfirmados.reduce((soma, e) => soma + (e.orcamento || 0), 0);
+        document.getElementById("totalGasto").textContent = `€${totalInvestido}`;
+    }
+
+
+    async function carregarFaturas(userId) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/faturas/cliente/${userId}`);
+            if (response.ok) {
+                dadosCliente.faturas = await response.json();
+            }
+        } catch (error) {
+            console.error("Erro ao carregar faturas:", error);
+        }
+    }
+    function mostrarTabela(tipo) {
+        const container = document.getElementById("tabelaContainer");
+
+        if (tipo === "reservas") {
+            if (!dadosCliente.reservas.length) {
+                container.innerHTML = "<p style='text-align:center;'>Sem reservas registradas.</p>";
+                return;
+            }
+
+            container.innerHTML = `
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Convidados</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${dadosCliente.reservas.map(r => `
+                    <tr>
+                        <td>${r.id}</td>
+                        <td>${r.nome}</td>
+                        <td>${new Date(r.data).toLocaleDateString('pt-PT')}</td>
+                        <td>${r.numeroconvidados}</td>
+                        <td>
+                            ${r.status === "Pré-Reserva"
+                ? `<button onclick="editarReserva(${r.id})">✏️ Editar</button>
+                                   <button onclick="cancelarReserva(${r.id})" style="margin-left:8px;color:red;">✖ Cancelar</button>`
+                : `<span style="color:#999;">Bloqueado</span>`}
+                        </td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>`;
+        }
+
+        if (tipo === "eventos") {
+            if (!dadosCliente.eventos.length) {
+                container.innerHTML = "<p style='text-align:center;'>Sem eventos registados.</p>";
+                return;
+            }
+
+            container.innerHTML = `
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cronograma</th>
+                    <th>Status</th>
+                    <th>Orçamento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${dadosCliente.eventos.map(e => `
+                    <tr>
+                        <td>${e.id}</td>
+                        <td>${e.cronograma}</td>
+                        <td>${e.statusevento}</td>
+                        <td>€${e.orcamento}</td>
+                        <td>
+                            ${e.statusevento === "Planeado"
+                ? `<button onclick="editarEvento(${e.id})">✏️ Editar</button>
+                                   <button onclick="cancelarEvento(${e.id})" style="margin-left:8px;color:red;">✖ Cancelar</button>`
+                : `<span style="color:#999;">Bloqueado</span>`}
+                        </td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>`;
+        }
+        if (tipo === "faturas") {
+            const eventosConfirmados = dadosCliente.eventos.filter(e => e.statusevento === "Confirmado");
+            const container = document.getElementById("tabelaContainer");
+
+            if (!eventosConfirmados.length) {
+                container.innerHTML = "<p style='text-align:center;'>Sem faturas disponíveis.</p>";
+                return;
+            }
+
+            container.innerHTML = `
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID Evento</th>
+                    <th>Descrição</th>
+                    <th>Orçamento</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${eventosConfirmados.map(e => `
+                    <tr>
+                        <td>${e.id}</td>
+                        <td>${e.cronograma}</td>
+                        <td>€${e.orcamento}</td>
+                        <td>${e.statusevento}</td>
+                        <td>
+                            <button onclick="gerarPdfFatura(${e.id})">📄 Exportar PDF</button>
+                        </td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+    `;
+        }
+
+    }
+
+
+    function atualizarReservasRecentes() {
+        const container = document.getElementById('reservasRecentes');
+        if (!container) return;
+
+        if (dadosCliente.reservas.length === 0) {
+            container.innerHTML = '<p style="color: #6c757d; text-align: center; padding: 2rem;">Nenhuma reserva encontrada</p>';
+            return;
+        }
+
+        const ultima = dadosCliente.reservas[dadosCliente.reservas.length - 1];
+
+        container.innerHTML = `
+        <div style="background: rgba(45, 80, 22, 0.05); padding: 1rem; border-radius: 10px;">
+            <h4 style="color: #2d5016; margin-bottom: 0.5rem;">${ultima.nome}</h4>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Data: ${new Date(ultima.data).toLocaleDateString('pt-PT')}</p>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Convidados: ${ultima.numeroconvidados}</p>
+        </div>
+    `;
+    }
+
+
+
+
+    function editarReserva(id) {
+        const reserva = dadosCliente.reservas.find(r => r.id === id);
+        if (!reserva) return alert("Reserva não encontrada");
+
+        document.getElementById("editReservaId").value = reserva.id;
+        document.getElementById("editNomeReserva").value = reserva.nome;
+        document.getElementById("editDataReserva").value = new Date(reserva.data).toISOString().split("T")[0];
+        document.getElementById("editNumConvidados").value = reserva.numeroconvidados;
+
+        openModal("editarReservaModal");
+    }
+
+    document.getElementById("editarReservaForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const id = document.getElementById("editReservaId").value;
+        const nome = document.getElementById("editNomeReserva").value;
+        const data = document.getElementById("editDataReserva").value;
+        const convidados = parseInt(document.getElementById("editNumConvidados").value);
+
+        if (convidados > 350) {
+            showMessage("editReservaMsg", "Máximo 350 convidados", "error");
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/reservas/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nome, data, numeroconvidados: convidados })
+            });
+
+            if (!response.ok) throw new Error();
+
+            showMessage("editReservaMsg", "Reserva atualizada com sucesso!", "success");
+
+            setTimeout(async () => {
+                closeModal("editarReservaModal");
+                await carregarReservas(sessionStorage.getItem("clienteId"));
+                await carregarEstatisticas(sessionStorage.getItem("clienteId"));
+                mostrarTabela("reservas");
+            }, 1000);
+        } catch (err) {
+            showMessage("editReservaMsg", "Erro ao atualizar reserva", "error");
+        }
+    });
+
+    async function editarEvento(id) {
+        const evento = dadosCliente.eventos.find(e => e.id === id);
+        if (!evento) return alert("Evento não encontrado");
+
+        if (evento.statusevento !== "Planeado") {
+            return alert("Este evento já foi confirmado e não pode ser editado.");
+        }
+
+        document.getElementById("editEventoId").value = evento.id;
+        document.getElementById("editCronograma").value = evento.cronograma || "";
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/servicos/evento/${id}`);
+            const servicosAssociados = await response.json();
+
+            const responseTipos = await fetch("http://localhost:8080/api/tiposervicos");
+            const tipos = await responseTipos.json();
+
+            const container = document.getElementById("editServicosCheckboxes");
+            container.innerHTML = "";
+
+            tipos.forEach(s => {
+                const checked = servicosAssociados.some(sa => sa.idTiposervico === s.id);
+                container.innerHTML += `
+        <label>
+          <input type="checkbox" class="servico-editar" data-id="${s.id}" data-nome="${s.designacao}" ${checked ? "checked" : ""}>
+          ${s.designacao}
+        </label><br/>
+      `;
+            });
+
+            openModal("editarEventoModal");
+        } catch (err) {
+            console.error("Erro ao carregar serviços do evento", err);
+        }
+    }
+    document.getElementById("editarEventoForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const eventoId = parseInt(document.getElementById("editEventoId").value);
+        const cronograma = document.getElementById("editCronograma").value;
+        const checkboxes = document.querySelectorAll(".servico-editar:checked");
+
+        if (!eventoId || !cronograma) return;
+
+        try {
+            // 🔁 Busca evento atualizado via API
+            const eventoResponse = await fetch(`http://localhost:8080/api/eventos/${eventoId}`);
+            if (!eventoResponse.ok) throw new Error("Erro ao buscar dados do evento");
+            const eventoAntigo = await eventoResponse.json();
+
+            const reserva = dadosCliente.reservas.find(r => r.id === eventoAntigo.idReserva);
+            const numConvidados = reserva?.numeroconvidados || 1;
+
+            let total = 500; // Custo fixo de aluguer da quinta
+            const servicos = [];
+
+            checkboxes.forEach(cb => {
+                const nome = cb.dataset.nome.toLowerCase();
+                let custo = 0;
+
+                if (nome === "catering") custo = 60 * numConvidados;
+                else if (nome === "iluminação") custo = 100;
+                else if (nome === "animação") custo = 300;
+                else if (nome === "dj") custo = 200;
+                else if (nome === "fotografia/vídeo") custo = 100;
+                else custo = 150;
+
+                total += custo;
+                servicos.push({ idTiposervico: parseInt(cb.dataset.id), custo });
+            });
+
+
+            await fetch(`http://localhost:8080/api/servicos/evento/${eventoId}`, { method: "DELETE" });
+
+            for (let s of servicos) {
+                await fetch("http://localhost:8080/api/servicos", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        statuspagamento: "Pendente",
+                        detalhesservico: `Editado: ${s.idTiposervico}`,
+                        custototal: s.custo,
+                        idEvento: eventoId,
+                        idTiposervico: s.idTiposervico
+                    })
+                });
+            }
+
+            await fetch(`http://localhost:8080/api/eventos/${eventoId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    cronograma,
+                    orcamento: total,
+                    statusevento: eventoAntigo.statusevento,
+                    idReserva: eventoAntigo.idReserva,
+                    idTipoevento: eventoAntigo.idTipoevento
+                })
+            });
+
+            showMessage("editEventoMsg", "Evento atualizado com sucesso!", "success");
+
+            setTimeout(async () => {
+                closeModal("editarEventoModal");
+                await carregarEventos(sessionStorage.getItem("clienteId"));
+                atualizarEventosProximos();
+                mostrarTabela("eventos");
+            }, 1000);
+
+        } catch (err) {
+            console.error("Erro ao guardar alterações", err);
+            showMessage("editEventoMsg", "Erro ao atualizar evento", "error");
+        }
+    });
+
+    function atualizarEventosProximos() {
+        const container = document.getElementById('eventosProximos');
+        if (!container) return;
+
+        const hoje = new Date();
+
+        const proximos = dadosCliente.eventos
+            .filter(e => e.statusevento === "Confirmado")
+            .map(evento => {
+                const reserva = dadosCliente.reservas.find(r => r.id === evento.idReserva);
+                return reserva ? { ...evento, dataEvento: reserva.data } : null;
+            })
+            .filter(e => e && new Date(e.dataEvento) > hoje);
+
+        if (proximos.length === 0) {
+            container.innerHTML = '<p style="color: #6c757d; text-align: center; padding: 2rem;">Nenhum evento confirmado futuro</p>';
+            return;
+        }
+
+        container.innerHTML = proximos.slice(0, 3).map(evento => `
+        <div style="background: rgba(45, 80, 22, 0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+            <h4 style="color: #2d5016; margin-bottom: 0.5rem;">Evento #${evento.id}</h4>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Data: ${new Date(evento.dataEvento).toLocaleDateString('pt-PT')}</p>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Orçamento: €${evento.orcamento}</p>
+            <p style="color: #4a7c59; font-size: 0.9rem;">Status: ${evento.statusevento}</p>
+        </div>
+    `).join('');
+    }
+
+    async function confirmarEvento(idEvento) {
+        try {
+            const res = await fetch(`http://localhost:8080/api/faturas/confirmar/${idEvento}`, {
+                method: "PUT"
+            });
+            if (res.ok) {
+                console.log("Evento confirmado!");
+            }
+        } catch (err) {
+            console.error("Erro ao confirmar evento", err);
+        }
+    }
+
+    async function cancelarEvento(idEvento) {
+        const evento = dadosCliente.eventos.find(ev => ev.id === idEvento);
+        if (!evento) {
+            showMessage("editEventoMsg", "Evento não encontrado ou já removido.", "error");
+            return;
+        }
+
+        mostrarConfirmacao("Deseja mesmo cancelar este evento e a reserva associada?", async () => {
+            try {
+                // 1. Apagar serviços do evento
+                await fetch(`http://localhost:8080/api/servicos/evento/${idEvento}`, { method: "DELETE" });
+
+                // 2. Apagar o evento
+                const resEvento = await fetch(`http://localhost:8080/api/eventos/${idEvento}`, { method: "DELETE" });
+                if (!resEvento.ok) throw new Error("Erro ao eliminar evento");
+
+                // 3. Apagar a reserva ligada
+                const resReserva = await fetch(`http://localhost:8080/api/reservas/${evento.idReserva}`, { method: "DELETE" });
+                if (!resReserva.ok) throw new Error("Erro ao eliminar reserva associada");
+
+                // 4. Atualizar UI
+                await carregarReservas(sessionStorage.getItem("clienteId"));
+                await carregarEventos(sessionStorage.getItem("clienteId"));
+                await carregarEstatisticas(sessionStorage.getItem("clienteId"));
+
+                mostrarTabela("eventos");
+                showMessage("editEventoMsg", "Evento e reserva associada foram cancelados.", "success");
+            } catch (err) {
+                console.error(err);
+                showMessage("editEventoMsg", "Erro ao cancelar evento e reserva.", "error");
+            }
+        });
+    }
+
+
+
+
+    async function cancelarReserva(idReserva) {
+        const reserva = dadosCliente.reservas.find(r => r.id === idReserva);
+        if (!reserva) {
+            showMessage("editReservaMsg", "Reserva não encontrada ou já removida.", "error");
+            return;
+        }
+
+        mostrarConfirmacao("Deseja cancelar esta reserva e o evento associado?", async () => {
+            try {
+                const eventoLigado = dadosCliente.eventos.find(ev => ev.idReserva === idReserva);
+
+                if (eventoLigado) {
+                    await fetch(`http://localhost:8080/api/servicos/evento/${eventoLigado.id}`, { method: "DELETE" });
+
+                    const resEvento = await fetch(`http://localhost:8080/api/eventos/${eventoLigado.id}`, { method: "DELETE" });
+                    if (!resEvento.ok) throw new Error("Erro ao apagar evento associado");
+                }
+
+                const resReserva = await fetch(`http://localhost:8080/api/reservas/${idReserva}`, { method: "DELETE" });
+                if (!resReserva.ok) throw new Error("Erro ao apagar reserva");
+
+                await carregarReservas(sessionStorage.getItem("clienteId"));
+                await carregarEventos(sessionStorage.getItem("clienteId"));
+                await carregarEstatisticas(sessionStorage.getItem("clienteId"));
+
+                mostrarTabela("reservas");
+                showMessage("editReservaMsg", "Reserva e evento foram cancelados.", "success");
+            } catch (err) {
+                console.error(err);
+                showMessage("editReservaMsg", "Erro ao cancelar reserva ou evento.", "error");
+            }
+        });
+    }
+
+    async function gerarPdfFatura(eventoId) {
+        const evento = dadosCliente.eventos.find(e => e.id === eventoId);
+        const reserva = dadosCliente.reservas.find(r => r.id === evento.idReserva);
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Cores corporativas verdes
+        const corPrimaria = [45, 80, 22]; // Verde escuro (#2d5016)
+        const corSecundaria = [74, 124, 89]; // Verde médio (#4a7c59)
+        const corClara = [240, 248, 235]; // Verde muito claro
+        const corVerde = [56, 142, 60]; // Verde para valores
+
+        // CABEÇALHO COM FUNDO COLORIDO
+        doc.setFillColor(...corPrimaria);
+        doc.rect(0, 0, 210, 45, 'F');
+
+        // Logo/Nome da empresa (branco sobre azul)
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(24);
+        doc.setFont("helvetica", "bold");
+        doc.text("QUINTA EVENTOS", 20, 25);
+
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
+        doc.text("Eventos Memoráveis • Experiências Únicas", 20, 35);
+
+        // Informações de contacto no cabeçalho
+        doc.setFontSize(9);
+        doc.text("www.quintaeventos.pt • geral@quintaeventos.pt • +351 123 456 789", 20, 42);
+
+        // TÍTULO DA FATURA
+        doc.setTextColor(...corSecundaria);
+        doc.setFontSize(22);
+        doc.setFont("helvetica", "bold");
+        doc.text("FATURA", 150, 25);
+
+        // Número da fatura
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Nº ${evento.id.toString().padStart(6, '0')}`, 150, 35);
+
+        // Data de emissão
+        const hoje = new Date();
+        doc.text(`Data: ${hoje.toLocaleDateString('pt-PT')}`, 150, 42);
+
+        // LINHA SEPARADORA
+        doc.setDrawColor(...corSecundaria);
+        doc.setLineWidth(0.5);
+        doc.line(20, 55, 190, 55);
+
+        // SECÇÃO PRINCIPAL - Detalhes do Evento
+        doc.setTextColor(...corSecundaria);
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        doc.text("DETALHES DO EVENTO", 20, 70);
+
+        // Caixa com fundo claro para os detalhes
+        doc.setFillColor(...corClara);
+        doc.rect(20, 75, 170, 80, 'F');
+        doc.setDrawColor(...corPrimaria);
+        doc.setLineWidth(0.3);
+        doc.rect(20, 75, 170, 80, 'S');
+
+        // Detalhes do evento com melhor formatação
+        doc.setTextColor(...corSecundaria);
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
+
+        let yPos = 85;
+        const espacamento = 12;
+
+        // ID do Evento
+        doc.setFont("helvetica", "bold");
+        doc.text("ID do Evento:", 25, yPos);
+        doc.setFont("helvetica", "normal");
+        doc.text(evento.id.toString(), 80, yPos);
+
+        yPos += espacamento;
+
+        // Data do Evento
+        doc.setFont("helvetica", "bold");
+        doc.text("Data do Evento:", 25, yPos);
+        doc.setFont("helvetica", "normal");
+        doc.text(new Date(reserva.data).toLocaleDateString('pt-PT'), 80, yPos);
+
+        yPos += espacamento;
+
+        // Cronograma
+        doc.setFont("helvetica", "bold");
+        doc.text("Cronograma:", 25, yPos);
+        doc.setFont("helvetica", "normal");
+        // Quebrar texto longo se necessário
+        const cronogramaTexto = evento.cronograma.length > 60
+            ? evento.cronograma.substring(0, 60) + "..."
+            : evento.cronograma;
+        doc.text(cronogramaTexto, 80, yPos);
+
+        yPos += espacamento;
+
+        // Número de Convidados
+        doc.setFont("helvetica", "bold");
+        doc.text("Nº de Convidados:", 25, yPos);
+        doc.setFont("helvetica", "normal");
+        doc.text(reserva.numeroconvidados.toString(), 80, yPos);
+
+        yPos += espacamento;
+
+        // Status com cor baseada no estado
+        doc.setFont("helvetica", "bold");
+        doc.text("Status:", 25, yPos);
+        doc.setFont("helvetica", "normal");
+
+        // Cor do status baseada no valor
+        if (evento.statusevento.toLowerCase().includes('confirmado')) {
+            doc.setTextColor(56, 142, 60); // Verde
+        } else if (evento.statusevento.toLowerCase().includes('pendente')) {
+            doc.setTextColor(230, 126, 34); // Laranja
+        } else {
+            doc.setTextColor(...corSecundaria);
+        }
+        doc.text(evento.statusevento, 80, yPos);
+
+        // SECÇÃO DO ORÇAMENTO - Destacada
+        doc.setFillColor(...corSecundaria);
+        doc.rect(20, 170, 170, 25, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("VALOR TOTAL:", 25, 185);
+
+        doc.setFontSize(18);
+        doc.text(`€${parseFloat(evento.orcamento).toFixed(2)}`, 120, 185);
+
+        // INFORMAÇÕES ADICIONAIS
+        doc.setTextColor(...corSecundaria);
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+
+        doc.text("CONDIÇÕES:", 20, 210);
+        doc.setFontSize(9);
+        doc.text("• Pagamento: 50% na confirmação, 50% até 7 dias antes do evento", 25, 220);
+        doc.text("• Cancelamento: Consultar condições gerais de contratação", 25, 228);
+        doc.text("• Esta fatura é válida por 30 dias a partir da data de emissão", 25, 236);
+
+        // RODAPÉ
+        doc.setDrawColor(...corSecundaria);
+        doc.setLineWidth(0.5);
+        doc.line(20, 250, 190, 250);
+
+        doc.setTextColor(...corSecundaria);
+        doc.setFontSize(8);
+        doc.text("Quinta Eventos, Lda. • NIF: 123456789 • Rua dos Eventos, 123, 1000-001 Lisboa", 20, 260);
+        doc.text(`Documento gerado automaticamente em ${hoje.toLocaleDateString('pt-PT')} às ${hoje.toLocaleTimeString('pt-PT')}`, 20, 270);
+
+        // Texto de agradecimento
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "italic");
+        doc.setTextColor(...corSecundaria);
+        doc.text("Obrigado por escolher a Quinta Eventos para o seu evento especial!", 20, 285);
+
+        // Guardar o PDF
+        doc.save(`Fatura_QuintaEventos_${evento.id.toString().padStart(6, '0')}.pdf`);
+    }
+
+
+
+
+
+    window.addEventListener("load", async function () {
+        const userId = sessionStorage.getItem("clienteId");
+        if (!userId) return;
+
+        const nomeGuardado = sessionStorage.getItem("clienteNome");
+        if (nomeGuardado) {
+            document.getElementById("userName").textContent = nomeGuardado;
+        } else {
+            await carregarNomeCliente(userId);
+        }
+
+        await carregarDadosIniciais(userId);
+        await carregarTiposServicos();
+    });
+
+
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+
+
+</body>
+</html>

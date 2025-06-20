@@ -2,6 +2,7 @@ package com.example.projetoii_dados.services;
 
 import com.example.core.models.Servico;
 import com.example.core.repositories.ServicoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,4 +31,15 @@ public class ServicoService {
     public void deleteById(Integer id) {
         repository.deleteById(id);
     }
+
+    public List<Servico> findByEventoId(Integer idEvento) {
+        return repository.findByEventoId(idEvento);
+    }
+
+    @Transactional
+    public void deleteByEventoId(Integer idEvento) {
+        repository.deleteByEventoId(idEvento);
+    }
+
+
 }

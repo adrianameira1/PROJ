@@ -101,4 +101,23 @@ public class ServicoController {
         servicoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/evento/{idEvento}")
+    public List<ServicoDTO> getByEvento(@PathVariable Integer idEvento) {
+        List<Servico> lista = servicoService.findByEventoId(idEvento);
+        return lista.stream()
+                .map(s -> new ServicoDTO(
+                        s.getStatuspagamento(),
+                        s.getDetalhesservico(),
+                        s.getCustototal(),
+                        s.getIdEvento().getId(),
+                        s.getIdTiposervico().getId()
+                )).collect(Collectors.toList());
+    }
+    @DeleteMapping("/evento/{idEvento}")
+    public ResponseEntity<Void> deleteByEvento(@PathVariable Integer idEvento) {
+        servicoService.deleteByEventoId(idEvento);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

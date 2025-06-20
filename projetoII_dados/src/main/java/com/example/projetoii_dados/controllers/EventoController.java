@@ -35,13 +35,16 @@ public class EventoController {
     public List<EventoDTO> getAllEventos() {
         return eventoService.findAll().stream()
                 .map(e -> new EventoDTO(
+                        e.getId(),
                         e.getOrcamento(),
                         e.getCronograma(),
                         e.getStatusevento(),
                         e.getIdReserva().getId(),
-                        e.getIdTipoevento().getId()))
+                        e.getIdTipoevento().getId()
+                ))
                 .collect(Collectors.toList());
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<EventoDTO> getEventoById(@PathVariable Integer id) {
@@ -83,9 +86,12 @@ public class EventoController {
         Evento evento = eventoService.findById(id);
         if (evento == null) return ResponseEntity.notFound().build();
 
+        if (!"Planeado".equalsIgnoreCase(evento.getStatusevento())) {
+            return ResponseEntity.status(403).build(); // Forbidden
+        }
+
         Reserva reserva = reservaRepository.findById(dto.getIdReserva()).orElse(null);
         Tipoevento tipoevento = tipoeventoRepository.findById(dto.getIdTipoevento()).orElse(null);
-
         if (reserva == null || tipoevento == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -100,6 +106,9 @@ public class EventoController {
         return ResponseEntity.ok().build();
     }
 
+
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvento(@PathVariable Integer id) {
         Evento evento = eventoService.findById(id);
@@ -108,4 +117,19 @@ public class EventoController {
         eventoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/cliente/{idCliente}")
+    public List<EventoDTO> getByCliente(@PathVariable Integer idCliente) {
+        return eventoService.findByClienteId(idCliente).stream()
+                .map(e -> new EventoDTO(
+                        e.getId(),
+                        e.getOrcamento(),
+                        e.getCronograma(),
+                        e.getStatusevento(),
+                        e.getIdReserva().getId(),
+                        e.getIdTipoevento().getId()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 }
